@@ -27,7 +27,7 @@ export default function ButtonUI({
   return (
     <Button
       isDisabled={isDisabled}
-      variant="solid"
+      variant="shadow"
       type={type}
       color={color}
       className={style}

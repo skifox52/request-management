@@ -8,7 +8,7 @@ export const Logo = ({ color, height }: TLogo) => (
     version="1.1"
     id="layer"
     xmlns="http://www.w3.org/2000/svg"
-    className={`h-${height} fill-${color} `}
+    className={`h-${height} fill-secondary`}
     x="0px"
     y="0px"
     viewBox="0 0 652 652"
