@@ -6,8 +6,11 @@ import InputUI from "./component/InputUI"
 import { Logo } from "./component/Logo"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type TloginSchema, loginSchema } from "./zod/loginSchema"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
+  const router = useRouter()
   const {
     register,
     formState: { isLoading, errors },
@@ -16,10 +19,19 @@ export default function Home() {
   } = useForm<TloginSchema>({
     resolver: zodResolver(loginSchema),
   })
-  const onSubmit = (data: TloginSchema) => {
-    console.log(data)
+  const onSubmit = async (data: TloginSchema) => {
+    try {
+      const res = await signIn("credentials", {
+        username: data.username,
+        passowrd: data.password,
+        redirect: false,
+      })
+      console.log("resulttttt", res)
+      router.push("/dashboard")
+    } catch (error: any) {
+      throw new Error(error)
+    }
   }
-  if (errors) console.log(errors)
   return (
     <div>
       <h1 className="text-center mt-12 mb-16 text-5xl font-thin">

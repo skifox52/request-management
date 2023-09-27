@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { type TresigterSchema, registerSchema } from "@/app/zod/registerSchema"
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, User } from "@prisma/client"
 import { hash } from "bcrypt"
-import { type UserT } from "@/app/types/userType"
 
 const client = new PrismaClient()
 
@@ -15,7 +14,7 @@ export async function POST(request: NextRequest) {
     })
   } else {
     const user: TresigterSchema = parsedBody.data
-    const newUser: UserT = await client.user.create({
+    const newUser: User = await client.user.create({
       data: {
         email: user.email,
         firstname: user.firstname,
