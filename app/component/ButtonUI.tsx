@@ -1,6 +1,7 @@
 import React from "react"
 
 import { Button } from "@nextui-org/react"
+import Spinner from "./Spinner"
 
 interface TButtonUI {
   value: string
@@ -15,6 +16,7 @@ interface TButtonUI {
   isDisabled?: boolean
   type?: "button" | "submit" | "reset" | undefined
   style?: string
+  isLoading?: boolean
 }
 
 export default function ButtonUI({
@@ -23,6 +25,7 @@ export default function ButtonUI({
   isDisabled,
   type,
   style,
+  isLoading,
 }: TButtonUI) {
   return (
     <Button
@@ -32,7 +35,7 @@ export default function ButtonUI({
       color={color}
       className={style}
     >
-      {value}
+      {isLoading ? <Spinner /> : value}
     </Button>
   )
 }

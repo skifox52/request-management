@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 import { type TresigterSchema, registerSchema } from "@/app/zod/registerSchema"
-import { PrismaClient, User } from "@prisma/client"
+import { User } from "@prisma/client"
 import { hash } from "bcrypt"
-
-const client = new PrismaClient()
+import prismaClient from "@/app/utils/prismaClient"
 
 export async function POST(request: NextRequest) {
   const parsedBody = registerSchema.safeParse(await request.json())
+  console.log(parsedBody)
   if (!parsedBody.success) {
     return NextResponse.json({
       error: "Validation failed",
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     })
   } else {
     const user: TresigterSchema = parsedBody.data
-    const newUser: User = await client.user.create({
+    const newUser: User = await prismaClient.user.create({
       data: {
         email: user.email,
         firstname: user.firstname,
