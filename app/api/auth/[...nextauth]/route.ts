@@ -32,7 +32,7 @@ const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/",
+    signIn: "/login",
   },
   callbacks: {
     session: ({ session, token }) => {

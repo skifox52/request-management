@@ -52,10 +52,10 @@ export default function Home() {
         <Logo color="white" height={"16"} />
         <h1 className="text-3xl text-center text-secondary">Connexion</h1>
         {(Object.keys(errors).length > 0 || !!unauthorizedError) && (
-          <div className="bg-red-500/30 border border-red-600 rounded-lg p-4 text-sm text-justify">
-            {errors.username?.message}
-            {errors.password?.message}
-            {unauthorizedError}
+          <div className="bg-red-500/30 border flex flex-col gap-1 font-semibold text-white/80 border-red-600 rounded-lg p-4 text-sm text-justify">
+            <p>{errors.username?.message}</p>
+            <p>{errors.password?.message}</p>
+            <p>{unauthorizedError}</p>
           </div>
         )}
         <InputUI
@@ -77,7 +77,7 @@ export default function Home() {
           value="Connexion"
           style="font-medium text-md mt-4"
           isLoading={isSubmitting}
-          isDisabled={isSubmitting}
+          isDisabled={isSubmitting || !!Object.keys(errors).length}
         />
       </form>
     </div>
