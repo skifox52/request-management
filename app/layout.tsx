@@ -1,13 +1,13 @@
 "use client"
 import "./globals.css"
-import { Ubuntu } from "next/font/google"
+import { Montserrat } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
 import NavbarUI from "./component/NavbarUI"
 import { SessionProvider } from "next-auth/react"
 
-const ubuntu = Ubuntu({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 })
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={ubuntu.className + " bg-primary"}>
+      <body className={montserrat.className + " bg-primary"}>
         <NextUIProvider>
           <SessionProvider>
             <NavbarUI />

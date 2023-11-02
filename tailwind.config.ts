@@ -7,6 +7,7 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
     extend: {
@@ -24,13 +25,14 @@ const config: Config = {
         light: {
           colors: {
             primary: "#101419",
-            secondary: "#EE8234",
+            secondary: "#FF9F21",
             content1: "#2F4858",
             foreground: "#FFFFF7",
           },
         },
       },
     }),
+    require("tw-elements/dist/plugin.cjs"),
   ],
 }
 export default config

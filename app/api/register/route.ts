@@ -6,7 +6,6 @@ import prismaClient from "@/app/utils/prismaClient"
 
 export async function POST(request: NextRequest) {
   const parsedBody = registerSchema.safeParse(await request.json())
-  console.log(parsedBody)
   if (!parsedBody.success) {
     return NextResponse.json({
       error: "Validation failed",

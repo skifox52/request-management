@@ -17,6 +17,7 @@ interface TButtonUI {
   type?: "button" | "submit" | "reset" | undefined
   style?: string
   isLoading?: boolean
+  onClick?: () => void
 }
 
 export default function ButtonUI({
@@ -26,6 +27,7 @@ export default function ButtonUI({
   type,
   style,
   isLoading,
+  onClick,
 }: TButtonUI) {
   return (
     <Button
@@ -34,6 +36,7 @@ export default function ButtonUI({
       type={type}
       color={color}
       className={style}
+      onClick={onClick}
     >
       {isLoading ? <Spinner /> : value}
     </Button>

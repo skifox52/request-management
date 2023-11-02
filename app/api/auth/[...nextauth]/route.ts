@@ -12,7 +12,8 @@ const authOptions: AuthOptions = {
       name: "credentials",
       credentials: {},
       authorize: async (credentials: any): Promise<User | null> => {
-        const parsedData = loginSchema.safeParse(credentials)
+        const { username, password } = credentials
+        const parsedData = loginSchema.safeParse({ username, password })
         if (!parsedData.success) return null
         try {
           const user: User | null = await prismaClient.user.findFirst({
@@ -32,7 +33,8 @@ const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/",
+    signOut: "/",
   },
   callbacks: {
     session: ({ session, token }) => {
@@ -40,9 +42,11 @@ const authOptions: AuthOptions = {
       return session
     },
     jwt: ({ user, account, token }) => {
+      const usr: User = user as User
       if (account) {
         token.accessToken = account.access_token
-        token.id = user.id
+        token.id = usr.id
+        token.role = usr.role
       }
       return token
     },
