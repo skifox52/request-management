@@ -1,13 +1,15 @@
 "use client"
 import { PanelRight } from "lucide-react"
-import React, { useEffect } from "react"
-import { Sidenav, initTE } from "tw-elements"
+import React, { useEffect, useState } from "react"
 
 interface SidebarProps {}
 
 const SidebarUI: React.FC<SidebarProps> = ({}) => {
   useEffect(() => {
-    initTE({ Sidenav })
+    const sidebar = async () => {
+      await import("tw-elements").then((m) => m.initTE({ Sidenav: m.Sidenav }))
+    }
+    sidebar()
   }, [])
 
   return (
