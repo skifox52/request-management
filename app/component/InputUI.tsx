@@ -7,6 +7,8 @@ interface TInputUI {
   type: string
   size: "sm" | "md" | "lg"
   className?: string
+  isInvalid?: boolean
+  errorMessage?: string
   variant: "flat" | "bordered" | "underlined" | "faded"
   color:
     | "secondary"
@@ -21,7 +23,20 @@ interface TInputUI {
 const InputUI: ForwardRefRenderFunction<
   RefObject<HTMLInputElement>,
   TInputUI
-> = ({ label, type, size, variant, color, className, ...props }, ref) => {
+> = (
+  {
+    label,
+    type,
+    size,
+    variant,
+    color,
+    className,
+    errorMessage,
+    isInvalid,
+    ...props
+  },
+  ref
+) => {
   return (
     <Input
       type={type}
@@ -31,6 +46,8 @@ const InputUI: ForwardRefRenderFunction<
       color={color}
       className={className}
       ref={ref as React.RefObject<HTMLInputElement>}
+      isInvalid={isInvalid}
+      errorMessage={errorMessage}
       {...props}
     />
   )

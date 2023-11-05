@@ -13,17 +13,22 @@ const AddUser: React.FC<pageProps> = ({}) => {
   const formRef = useRef<HTMLFormElement | null>(null)
   const {
     register,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
-    getValues,
     handleSubmit,
   } = useForm<TresigterSchema>({
     resolver: zodResolver(registerSchema),
   })
-  const addUser = (data: TresigterSchema) => {
-    console.log(data)
+  const addUser = async (data: TresigterSchema) => {
+    const response = await fetch("/api/users/add", {
+      body: JSON.stringify(data),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    console.log(await response.json())
   }
-  console.log(getValues())
   return (
     <form
       onSubmit={handleSubmit(addUser)}
@@ -38,10 +43,9 @@ const AddUser: React.FC<pageProps> = ({}) => {
           type="text"
           variant="faded"
           color="primary"
+          isInvalid={!!errors.lastname}
+          errorMessage={errors.lastname?.message}
         />
-        {errors.lastname && (
-          <span className="text-red-600">{errors.lastname.message}</span>
-        )}
       </div>
       <InputUI
         {...register("firstname")}
@@ -50,6 +54,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         type="text"
         variant="faded"
         color="primary"
+        isInvalid={!!errors.firstname}
+        errorMessage={errors.firstname?.message}
       />
       <InputUI
         {...register("phone")}
@@ -58,6 +64,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         type="number"
         variant="faded"
         color="primary"
+        isInvalid={!!errors.phone}
+        errorMessage={errors.phone?.message}
       />
       <InputUI
         {...register("email")}
@@ -66,6 +74,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         type="email"
         variant="faded"
         color="primary"
+        isInvalid={!!errors.email}
+        errorMessage={errors.email?.message}
       />
       <InputUI
         {...register("username")}
@@ -74,6 +84,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         variant="faded"
         color="primary"
         type="text"
+        isInvalid={!!errors.username}
+        errorMessage={errors.username?.message}
       />
       <SelectUI
         {...register("id_dep")}
@@ -82,6 +94,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         variant="faded"
         color="primary"
         size="sm"
+        isInvalid={!!errors.id_dep}
+        errorMessage={errors.id_dep?.message}
       />
       <SelectUI
         {...register("id_group")}
@@ -90,6 +104,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         variant="faded"
         color="primary"
         size="sm"
+        isInvalid={!!errors.id_group}
+        errorMessage={errors.id_group?.message}
       />
       <SelectUI
         {...register("office_num")}
@@ -98,6 +114,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         variant="faded"
         color="primary"
         size="sm"
+        isInvalid={!!errors.office_num}
+        errorMessage={errors.office_num?.message}
       />
       <SelectUI
         {...register("function")}
@@ -106,6 +124,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         variant="faded"
         color="primary"
         size="sm"
+        isInvalid={!!errors.function}
+        errorMessage={errors.function?.message}
       />
       <SelectUI
         {...register("role")}
@@ -117,6 +137,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         variant="faded"
         color="primary"
         size="sm"
+        isInvalid={!!errors.role}
+        errorMessage={errors.role?.message}
       />
       <InputUI
         {...register("password")}
@@ -125,6 +147,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         type="password"
         variant="faded"
         color="primary"
+        isInvalid={!!errors.password}
+        errorMessage={errors.password?.message}
       />
       <InputUI
         {...register("confirmPassword")}
@@ -133,6 +157,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
         type="password"
         variant="faded"
         color="primary"
+        isInvalid={!!errors.confirmPassword}
+        errorMessage={errors.confirmPassword?.message}
       />
       <div className="flex gap-6 w-full lg:col-span-2 xl:col-span-3">
         <ButtonUI
@@ -148,6 +174,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
           color="default"
           value="Ajouter"
           className="font-bold lg:text-lg w-full"
+          isLoading={isSubmitting}
+          isDisabled={isSubmitting}
           type="submit"
         />
       </div>

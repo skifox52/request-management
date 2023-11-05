@@ -6,6 +6,8 @@ interface TSelect {
   data: { value: string | number; label: string }[]
   selectLabel: string
   className?: string
+  isInvalid?: boolean
+  errorMessage?: string
   variant: "flat" | "bordered" | "underlined" | "faded"
   size: "sm" | "md" | "lg"
   color:
@@ -21,7 +23,20 @@ interface TSelect {
 const SelectUI: ForwardRefRenderFunction<
   RefObject<HTMLSelectElement>,
   TSelect
-> = ({ selectLabel, data, className, variant, color, size, ...props }, ref) => {
+> = (
+  {
+    selectLabel,
+    data,
+    className,
+    variant,
+    color,
+    size,
+    isInvalid,
+    errorMessage,
+    ...props
+  },
+  ref
+) => {
   return (
     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
       <Select
@@ -31,6 +46,8 @@ const SelectUI: ForwardRefRenderFunction<
         variant={variant}
         size={size}
         ref={ref as React.RefObject<HTMLSelectElement>}
+        isInvalid={isInvalid}
+        errorMessage={errorMessage}
         {...props}
       >
         {data.map((d) => (
