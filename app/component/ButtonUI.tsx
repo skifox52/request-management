@@ -15,7 +15,7 @@ interface TButtonUI {
     | undefined
   isDisabled?: boolean
   type?: "button" | "submit" | "reset" | undefined
-  style?: string
+  className?: string
   isLoading?: boolean
   onClick?: () => void
 }
@@ -25,7 +25,7 @@ export default function ButtonUI({
   color,
   isDisabled,
   type,
-  style,
+  className,
   isLoading,
   onClick,
 }: TButtonUI) {
@@ -35,7 +35,7 @@ export default function ButtonUI({
       variant="shadow"
       type={type}
       color={color}
-      className={style}
+      className={className}
       onClick={onClick}
     >
       {isLoading ? <Spinner /> : value}

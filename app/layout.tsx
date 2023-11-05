@@ -21,7 +21,7 @@ export default function RootLayout({
         <NextUIProvider>
           <SessionProvider>
             <NavbarUI />
-            <main className="max-w-7xl mx-auto py-8 text-foreground">
+            <main className="mx-auto py-8 container text-foreground">
               {children}
             </main>
           </SessionProvider>

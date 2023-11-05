@@ -6,19 +6,30 @@ interface TInputUI {
   label: string
   type: string
   size: "sm" | "md" | "lg"
+  className?: string
+  variant: "flat" | "bordered" | "underlined" | "faded"
+  color:
+    | "secondary"
+    | "default"
+    | "primary"
+    | "success"
+    | "warning"
+    | "danger"
+    | undefined
 }
 
 const InputUI: ForwardRefRenderFunction<
   RefObject<HTMLInputElement>,
   TInputUI
-> = ({ label, type, size, ...props }, ref) => {
+> = ({ label, type, size, variant, color, className, ...props }, ref) => {
   return (
     <Input
       type={type}
       label={label}
       size={size}
-      variant="underlined"
-      color="secondary"
+      variant={variant}
+      color={color}
+      className={className}
       ref={ref as React.RefObject<HTMLInputElement>}
       {...props}
     />

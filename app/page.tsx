@@ -29,7 +29,7 @@ export default function Home() {
 
   const { username, password } = watch()
 
-  const onSubmit = async (data: TloginSchema) => {
+  const login = async (data: TloginSchema) => {
     try {
       const res = await signIn("credentials", {
         username: data.username,
@@ -58,7 +58,7 @@ export default function Home() {
       </h1>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(login)}
         className={`p-8 pt-3 transition-all duration-250 flex flex-col gap-4 border border-opacity-10 rounded-3xl mx-auto border-foreground max-w-md ${
           !focused && " shadow-lg shadow-content1 -translate-y-1"
         }`}
@@ -74,22 +74,26 @@ export default function Home() {
         )}
         <InputUI
           {...register("username")}
+          variant="underlined"
           type="text"
           label="Nom d'utilisateur"
           size="lg"
+          color="secondary"
         />
         <InputUI
           {...register("password")}
+          variant="underlined"
           type="password"
           label="Mot de passe"
           size="lg"
+          color="secondary"
         />
 
         <ButtonUI
           color="secondary"
           type="submit"
           value="Connexion"
-          style="font-medium text-md mt-4"
+          className="font-medium text-md mt-4"
           isLoading={isSubmitting}
           isDisabled={isSubmitting || !!Object.keys(errors).length || !isValid}
         />

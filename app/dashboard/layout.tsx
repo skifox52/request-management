@@ -4,7 +4,7 @@ import SidebarUI from "../component/SidebarUI"
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <main className="bg-foreground text-black p-6 rounded-xl">
+    <main className="bg-content1 border border-white/10 p-6 rounded-xl">
       <SidebarUI />
       {children}
     </main>
