@@ -24,7 +24,7 @@ enum Urgence {
 model User {
   id String @id @default(uuid())
   id_dep String @unique
-  id_group String @unique
+  id_group String 
   firstname  String
   lastname String 
   phone Int
@@ -36,40 +36,50 @@ model User {
   role  Role  
   departement Departement @relation(fields: [id_dep],references: [id])
   group Groupe @relation(fields: [id_group], references: [id])
+  equipement Equipement[]
+  reparation Reparation[]
+  intervention Intervention[]
   demandeIntervention DemandeIntervention[]
 }
 
 model Groupe {
   id String @id @default(uuid())
-  users User[]
   libelle String
-}
-
-model Departement {
-  id String @id @default(uuid())
-  direction Direction @relation(fields:[dir_id], references: [id])
-  dir_id String @unique
-  dep_name  String
   users User[]
 }
 
 model Direction {
   id String @id @default(uuid())
   direction_name String
-  departement Departement?
+  departements Departement[]
+}
+
+model Departement {
+  id String @id @default(uuid())
+  dir_id String
+  dep_name  String
+  users User?
+  direction Direction @relation(fields:[dir_id], references: [id]) 
 }
 
 model Equipement {
   id String @id @default(uuid())
+  id_user String 
+  id_equipement String
+  caracteristique String?
   date_aquisition DateTime
   date_fin_garantie DateTime
-  Date_sortie DateTime
+  date_sortie DateTime
+  typeEquipement TypeEquipement @relation(fields: [id_equipement], references: [id])
+  user User @relation(fields: [id_user],references: [id])
   demandeIntervention DemandeIntervention[]
+  intervention Intervention[]
 }
 
 model TypeEquipement {
   id String @id @default(uuid())
   libelle String
+  equipement Equipement[]
 }
 
 model Fournisseur {
@@ -78,56 +88,80 @@ model Fournisseur {
   adresse String
   adresse_web String
   num_tel Int
+  decharge Decharge?
 }
 
 model Decharge {
   id String @id @default(uuid())
+  id_fournisseur String @unique
   date_etablir DateTime
   date_de_sortie DateTime
   date_entree DateTime
+  fournisseur Fournisseur @relation(fields: [id_fournisseur], references: [id])
+  reparation Reparation?
 }
 
 model Piece {
   id String @id @default(uuid())
   modele String
   marque String
+  demandePiece DemandePiece[]
 }
 
 model DemandePiece {
   id String @id @default(uuid())
+  id_magasin String @unique
   modele String
   marque String
   etat_piece String
+  magasin Magasin @relation(fields: [id_magasin], references: [id])
+  piece Piece[]
 }
 
 model Magasin {
   id String @id @default(uuid())
   tel_magasin Int
   email String
+  demandePiece DemandePiece?
 }
 
 model Reparation {
   id String @id @default(uuid())
+  id_user String 
+  id_intervention String @unique
+  id_decharge String @unique
   probleme String
   solution String
   date_reparation String
+  user User @relation(fields: [id_user], references: [id])
+  intervention Intervention @relation(fields: [id_intervention], references: [id])
+  decharge Decharge @relation(fields: [id_decharge], references: [id])
 }
 
 model Intervention {
   id String @id @default(uuid())
+  id_equipement String 
+  id_demande_intervention String @unique
+  id_user String 
+  id_demande String 
   urgence Urgence
   description String
   type_panne String
   cat_panne String
   etat String
   date_fin_intervention DateTime? 
+  equipement Equipement @relation(fields: [id_equipement], references: [id])
+  user User @relation(fields: [id_user],references: [id])
+  demandeIntervention DemandeIntervention @relation(fields: [id_demande_intervention], references: [id])
+  reparation Reparation?
 }
 
 model DemandeIntervention {
   id String @id @default(uuid())
-  personne User @relation(fields: [id_personne], references: [id])
-  id_personne String
+  id_user String
   motif_demande String
   date_deamdne String
+  personne User @relation(fields: [id_user], references: [id])
   equipement Equipement[]
+  intervention Intervention?
 }

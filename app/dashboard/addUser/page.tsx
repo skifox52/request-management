@@ -5,7 +5,7 @@ import SelectUI from "@/app/component/SelectUI"
 import ToastUI from "@/app/component/ToastUI"
 import { registerSchema, TresigterSchema } from "@/app/zod/registerSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 
 interface pageProps {}
@@ -13,6 +13,20 @@ interface pageProps {}
 const AddUser: React.FC<pageProps> = ({}) => {
   const [success, setSuccess] = useState<boolean>(false)
   const formRef = useRef<HTMLFormElement | null>(null)
+  const [formIntialData, setFormInitialData] = useState<{
+    departement: { id: string; dep_name: string }[]
+    groupe: { id: string; libelle: string }[]
+  } | null>(null)
+
+  useEffect(() => {
+    fetch("/api/util")
+      .then((response) => response.json())
+      .then((data) => setFormInitialData(data))
+      .catch((err) => {
+        throw new Error(err)
+      })
+  }, [])
+
   const {
     register,
     formState: { errors, isSubmitting },
@@ -21,9 +35,10 @@ const AddUser: React.FC<pageProps> = ({}) => {
   } = useForm<TresigterSchema>({
     resolver: zodResolver(registerSchema),
   })
+
   const addUser = async (data: TresigterSchema) => {
     try {
-      await fetch("/api/users/add", {
+      const response = await fetch("/api/users/add", {
         body: JSON.stringify(data),
         method: "POST",
         headers: {
@@ -32,14 +47,17 @@ const AddUser: React.FC<pageProps> = ({}) => {
       })
       reset()
       formRef.current?.reset()
-      setSuccess(true)
-      setTimeout(() => {
-        setSuccess(false)
-      }, 5000)
+      if (response.ok) {
+        setSuccess(true)
+        setTimeout(() => {
+          setSuccess(false)
+        }, 5000)
+      }
     } catch (error: any) {
       throw new Error(error)
     }
   }
+
   return (
     <>
       <form
@@ -102,7 +120,14 @@ const AddUser: React.FC<pageProps> = ({}) => {
         <SelectUI
           {...register("id_dep")}
           selectLabel="Département"
-          data={[{ label: "test", value: 1 }]}
+          data={
+            formIntialData
+              ? formIntialData?.departement?.map((d) => ({
+                  value: d.id,
+                  label: d.dep_name,
+                }))
+              : []
+          }
           variant="faded"
           color="primary"
           size="sm"
@@ -112,27 +137,34 @@ const AddUser: React.FC<pageProps> = ({}) => {
         <SelectUI
           {...register("id_group")}
           selectLabel="Groupe"
-          data={[{ label: "test", value: 1 }]}
+          data={
+            formIntialData
+              ? formIntialData?.groupe?.map((d) => ({
+                  value: d.id,
+                  label: d.libelle,
+                }))
+              : []
+          }
           variant="faded"
           color="primary"
           size="sm"
           isInvalid={!!errors.id_group}
           errorMessage={errors.id_group?.message}
         />
-        <SelectUI
+        <InputUI
           {...register("office_num")}
-          selectLabel="Numéro de bureau"
-          data={[{ label: "test", value: 1 }]}
+          type="number"
+          label="Numéro de bureau"
           variant="faded"
           color="primary"
           size="sm"
           isInvalid={!!errors.office_num}
           errorMessage={errors.office_num?.message}
         />
-        <SelectUI
+        <InputUI
           {...register("function")}
-          selectLabel="Fonction"
-          data={[{ label: "test", value: 1 }]}
+          label="Fonction"
+          type="text"
           variant="faded"
           color="primary"
           size="sm"

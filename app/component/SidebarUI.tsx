@@ -71,7 +71,7 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
             >
               <li className="relative">
                 <Link
-                  href={"dashboard/addUser"}
+                  href={"/dashboard/addUser"}
                   className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                   data-te-sidenav-link-ref
                 >
@@ -83,7 +83,7 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
               </li>
               <li className="relative">
                 <Link
-                  href={"allUsers"}
+                  href={"/dashboard/allUsers"}
                   className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                   data-te-sidenav-link-ref
                 >
