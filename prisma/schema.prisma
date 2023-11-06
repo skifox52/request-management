@@ -15,10 +15,16 @@ enum Role {
   user
 }
 
+enum Urgence {
+  basse
+  moyenne
+  haute
+}
+
 model User {
   id String @id @default(uuid())
-  id_dep String
-  id_group String?
+  id_dep String @unique
+  id_group String @unique
   firstname  String
   lastname String 
   phone Int
@@ -28,4 +34,100 @@ model User {
   office_num Int 
   function String
   role  Role  
+  departement Departement @relation(fields: [id_dep],references: [id])
+  group Groupe @relation(fields: [id_group], references: [id])
+  demandeIntervention DemandeIntervention[]
+}
+
+model Groupe {
+  id String @id @default(uuid())
+  users User[]
+  libelle String
+}
+
+model Departement {
+  id String @id @default(uuid())
+  direction Direction @relation(fields:[dir_id], references: [id])
+  dir_id String @unique
+  dep_name  String
+  users User[]
+}
+
+model Direction {
+  id String @id @default(uuid())
+  direction_name String
+  departement Departement?
+}
+
+model Equipement {
+  id String @id @default(uuid())
+  date_aquisition DateTime
+  date_fin_garantie DateTime
+  Date_sortie DateTime
+  demandeIntervention DemandeIntervention[]
+}
+
+model TypeEquipement {
+  id String @id @default(uuid())
+  libelle String
+}
+
+model Fournisseur {
+  id String @id @default(uuid())
+  nom String
+  adresse String
+  adresse_web String
+  num_tel Int
+}
+
+model Decharge {
+  id String @id @default(uuid())
+  date_etablir DateTime
+  date_de_sortie DateTime
+  date_entree DateTime
+}
+
+model Piece {
+  id String @id @default(uuid())
+  modele String
+  marque String
+}
+
+model DemandePiece {
+  id String @id @default(uuid())
+  modele String
+  marque String
+  etat_piece String
+}
+
+model Magasin {
+  id String @id @default(uuid())
+  tel_magasin Int
+  email String
+}
+
+model Reparation {
+  id String @id @default(uuid())
+  probleme String
+  solution String
+  date_reparation String
+}
+
+model Intervention {
+  id String @id @default(uuid())
+  urgence Urgence
+  description String
+  type_panne String
+  cat_panne String
+  etat String
+  date_fin_intervention DateTime? 
+}
+
+model DemandeIntervention {
+  id String @id @default(uuid())
+  personne User @relation(fields: [id_personne], references: [id])
+  id_personne String
+  motif_demande String
+  date_deamdne String
+  equipement Equipement[]
 }

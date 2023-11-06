@@ -1,13 +1,13 @@
 "use client"
 import "./globals.css"
-import { Montserrat } from "next/font/google"
+import { Oswald } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
 import NavbarUI from "./component/NavbarUI"
 import { SessionProvider } from "next-auth/react"
 
-const montserrat = Montserrat({
+const oswald = Oswald({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "300", "700", "200", "600"],
 })
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={montserrat.className + " bg-primary"}>
+      <body className={oswald.style + " bg-[#101419]"}>
         <NextUIProvider>
           <SessionProvider>
             <NavbarUI />
