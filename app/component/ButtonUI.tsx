@@ -38,7 +38,7 @@ export default function ButtonUI({
       className={className}
       onClick={onClick}
     >
-      {isLoading ? <Spinner /> : value}
+      {isLoading ? <Spinner color="default" /> : value}
     </Button>
   )
 }

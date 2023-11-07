@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         lastname: user.lastname,
         office_num: user.office_num,
         password: await hash(user.password, 12),
-        phone: user.phone,
+        phone: +user.phone,
         role: user.role,
         username: user.username,
         id_group: user.id_group,

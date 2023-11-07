@@ -3,23 +3,14 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
-enum Role {
-  admin
-  user
-}
-
-enum Urgence {
-  basse
-  moyenne
-  haute
-}
 
 model User {
   id String @id @default(uuid())
@@ -33,7 +24,7 @@ model User {
   password String
   office_num Int 
   function String
-  role  Role  
+  role  String  
   departement Departement @relation(fields: [id_dep],references: [id])
   group Groupe @relation(fields: [id_group], references: [id])
   equipement Equipement[]
@@ -144,7 +135,7 @@ model Intervention {
   id_demande_intervention String @unique
   id_user String 
   id_demande String 
-  urgence Urgence
+  urgence String
   description String
   type_panne String
   cat_panne String
