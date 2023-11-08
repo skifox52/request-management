@@ -1,9 +1,10 @@
 "use client"
+import { registerUserAction } from "@/app/actions/authActions"
 import ButtonUI from "@/app/component/ButtonUI"
 import InputUI from "@/app/component/InputUI"
 import SelectUI from "@/app/component/SelectUI"
 import ToastUI from "@/app/component/ToastUI"
-import { registerSchema, TresigterSchema } from "@/app/zod/registerSchema"
+import { registerSchema, TregisterSchema } from "@/app/zod/registerSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import React, { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -32,27 +33,20 @@ const AddUser: React.FC<pageProps> = ({}) => {
     formState: { errors, isSubmitting },
     reset,
     handleSubmit,
-  } = useForm<TresigterSchema>({
+  } = useForm<TregisterSchema>({
     resolver: zodResolver(registerSchema),
   })
 
-  const addUser = async (data: TresigterSchema) => {
+  const addUser = async (data: TregisterSchema) => {
     try {
-      const response = await fetch("/api/users/add", {
-        body: JSON.stringify(data),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      await registerUserAction(data)
       reset()
       formRef.current?.reset()
-      if (response.ok) {
-        setSuccess(true)
-        setTimeout(() => {
-          setSuccess(false)
-        }, 5000)
-      }
+
+      setSuccess(true)
+      setTimeout(() => {
+        setSuccess(false)
+      }, 5000)
     } catch (error: any) {
       throw new Error(error)
     }

@@ -3,18 +3,17 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 
 model User {
   id String @id @default(uuid())
-  id_dep String @unique
+  id_dep String 
   id_group String 
   firstname  String
   lastname String 
@@ -49,7 +48,7 @@ model Departement {
   id String @id @default(uuid())
   dir_id String
   dep_name  String
-  users User?
+  users User[]
   direction Direction @relation(fields:[dir_id], references: [id]) 
 }
 
