@@ -211,7 +211,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
           <ButtonUI
             color="default"
             value="Ajouter"
-            className="font-bold lg:text-lg w-full"
+            className="font-bold lg:text-lg w-full text-white"
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
             type="submit"

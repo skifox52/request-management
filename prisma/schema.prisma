@@ -24,6 +24,7 @@ model User {
   office_num Int 
   function String
   role  String  
+  isActive Boolean @default(true)
   departement Departement @relation(fields: [id_dep],references: [id])
   group Groupe @relation(fields: [id_group], references: [id])
   equipement Equipement[]

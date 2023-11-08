@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useEffect } from "react"
 import {
   Table,
   TableHeader,
@@ -20,9 +20,11 @@ import {
   ChipProps,
   SortDescriptor,
 } from "@nextui-org/react"
+import useSWR from "swr"
 import { columns, users, statusOptions } from "./data"
 import { capitalize } from "./utils"
 import { ChevronDown, MoreVertical, Search } from "lucide-react"
+import { TUser } from "@/app/api/users/all/route"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -35,13 +37,22 @@ const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"]
 type User = (typeof users)[0]
 
 export default function App() {
+  const userFetcher = (url: string) => fetch(url).then((res) => res.json())
+
+  const { data, error, isLoading } = useSWR<TUser>(
+    "/api/users/all",
+    userFetcher
+  )
+  console.log(isLoading)
+  console.log(data)
+
   const [filterValue, setFilterValue] = React.useState("")
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]))
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all")
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "age",
     direction: "ascending",
@@ -224,7 +235,7 @@ export default function App() {
                   size="sm"
                   variant="flat"
                 >
-                  Columns
+                  Colonnes
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -243,22 +254,6 @@ export default function App() {
               </DropdownMenu>
             </Dropdown>
           </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total {users.length} users
-          </span>
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-            </select>
-          </label>
         </div>
       </div>
     )
@@ -321,14 +316,7 @@ export default function App() {
       removeWrapper
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
-      checkboxesProps={{
-        classNames: {
-          wrapper: "after:bg-primary after:text-background text-background",
-        },
-      }}
       classNames={classNames}
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
