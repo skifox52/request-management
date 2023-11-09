@@ -1,9 +1,8 @@
 "use client"
 import React from "react"
 
-interface errorProps {}
-
-const error: React.FC<errorProps> = ({}) => {
+const error = ({ error, reset }: { error: Error; reset: () => void }) => {
+  console.log("aywaah", error)
   return <h1>hello error</h1>
 }
 export default error

@@ -39,7 +39,9 @@ const AddUser: React.FC<pageProps> = ({}) => {
 
   const addUser = async (data: TregisterSchema) => {
     try {
-      await registerUserAction(data)
+      const response = await registerUserAction(data)
+      console.log(window)
+      if (!response?.success) throw new Error(response?.error)
       reset()
       formRef.current?.reset()
 
@@ -48,7 +50,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
         setSuccess(false)
       }, 5000)
     } catch (error: any) {
-      throw new Error(error)
+      throw Error(error)
     }
   }
 
@@ -88,6 +90,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
           type="number"
           variant="faded"
           color="primary"
+          startContent="+213"
           isInvalid={!!errors.phone}
           errorMessage={errors.phone?.message}
         />
@@ -204,8 +207,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
             value="Réinitialiser"
             className="font-bold w-full lg:text-lg text-white"
             onClick={() => {
-              reset()
-              formRef.current?.reset()
+              throw new Error("error from reset button")
             }}
           />
           <ButtonUI

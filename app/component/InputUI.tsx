@@ -9,6 +9,7 @@ interface TInputUI {
   className?: string
   isInvalid?: boolean
   errorMessage?: string
+  startContent?: string
   variant: "flat" | "bordered" | "underlined" | "faded"
   color:
     | "secondary"
@@ -33,6 +34,7 @@ const InputUI: ForwardRefRenderFunction<
     className,
     errorMessage,
     isInvalid,
+    startContent,
     ...props
   },
   ref
@@ -48,6 +50,7 @@ const InputUI: ForwardRefRenderFunction<
       ref={ref as React.RefObject<HTMLInputElement>}
       isInvalid={isInvalid}
       errorMessage={errorMessage}
+      startContent={startContent}
       {...props}
     />
   )

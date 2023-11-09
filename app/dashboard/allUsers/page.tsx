@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react"
+import React, { ReactNode, useEffect } from "react"
 import {
   Table,
   TableHeader,
@@ -19,9 +19,14 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@nextui-org/react"
 import useSWR from "swr"
-import { columns, users, statusOptions } from "./data"
+import { columns, statusOptions } from "./data"
 import { capitalize } from "./utils"
 import { ChevronDown, MoreVertical, Search } from "lucide-react"
 import { TUser } from "@/app/api/users/all/route"
@@ -34,17 +39,13 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"]
 
-type User = (typeof users)[0]
-
 export default function App() {
   const userFetcher = (url: string) => fetch(url).then((res) => res.json())
-
-  const { data, error, isLoading } = useSWR<TUser>(
-    "/api/users/all",
-    userFetcher
-  )
-  console.log(isLoading)
-  console.log(data)
+  const {
+    data: users,
+    error,
+    isLoading,
+  } = useSWR<TUser[]>("/api/users/all", userFetcher)
 
   const [filterValue, setFilterValue] = React.useState("")
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]))
@@ -59,7 +60,7 @@ export default function App() {
   })
   const [page, setPage] = React.useState(1)
 
-  const pages = Math.ceil(users.length / rowsPerPage)
+  const pages = Math.ceil((users?.length as number) / rowsPerPage)
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -72,11 +73,11 @@ export default function App() {
   }, [visibleColumns])
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users]
+    let filteredUsers = users?.length! > 0 ? [...users!] : []
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers?.filter((user) =>
+        user.lastname.toLowerCase().includes(filterValue.toLowerCase())
       )
     }
     if (
@@ -84,12 +85,12 @@ export default function App() {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+        Array.from(statusFilter).includes(user.isActive ? "active" : "paused")
       )
     }
 
     return filteredUsers
-  }, [users, filterValue, statusFilter])
+  }, [filterValue, statusFilter, hasSearchFilter, users])
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
@@ -99,38 +100,59 @@ export default function App() {
   }, [page, filteredItems, rowsPerPage])
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number
-      const second = b[sortDescriptor.column as keyof User] as number
+    return [...items].sort((a: TUser, b: TUser) => {
+      const first = a[sortDescriptor.column as keyof TUser] as number
+      const second = b[sortDescriptor.column as keyof TUser] as number
       const cmp = first < second ? -1 : first > second ? 1 : 0
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp
     })
   }, [sortDescriptor, items])
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User]
+  const renderCell = React.useCallback((user: TUser, columnKey: React.Key) => {
+    const cellValue = user[columnKey as keyof TUser]
 
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "full", size: "sm", src: user.avatar }}
             classNames={{
               description: "text-default-500",
             }}
-            description={user.email}
-            name={cellValue}
+            name={user.lastname}
           >
-            {user.email}
+            {user.lastname}
           </User>
         )
       case "role":
         return (
           <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-500">
-              {user.team}
+            <p className="text-bold text-small capitalize">
+              {cellValue as ReactNode}
+            </p>
+          </div>
+        )
+      case "departement":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">
+              {user.departement.dep_name}
+            </p>
+          </div>
+        )
+      case "groupe":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">
+              {user.group.libelle}
+            </p>
+          </div>
+        )
+      case "role":
+        return (
+          <div className="flex flex-col">
+            <p className="text-bold text-small capitalize">
+              {cellValue as ReactNode}
             </p>
           </div>
         )
@@ -138,11 +160,11 @@ export default function App() {
         return (
           <Chip
             className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.status]}
+            color={statusColorMap[user.isActive === true ? "active" : "paused"]}
             size="sm"
             variant="dot"
           >
-            {cellValue}
+            {user.isActive ? "actif" : "paused"}
           </Chip>
         )
       case "actions":
@@ -155,13 +177,15 @@ export default function App() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
+                <DropdownItem onClick={() => console.log("edit")}>
+                  Modifier
+                </DropdownItem>
+                <DropdownItem>Supprimer</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
         )
+
       default:
         return cellValue
     }
@@ -257,21 +281,13 @@ export default function App() {
         </div>
       </div>
     )
-  }, [
-    filterValue,
-    statusFilter,
-    visibleColumns,
-    onSearchChange,
-    onRowsPerPageChange,
-    users.length,
-    hasSearchFilter,
-  ])
+  }, [filterValue, statusFilter, visibleColumns, onSearchChange])
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <Pagination
-          showControls
+          // showControls
           classNames={{
             cursor: "bg-black text-background",
           }}
@@ -282,14 +298,9 @@ export default function App() {
           variant="light"
           onChange={setPage}
         />
-        <span className="text-small text-default-400">
-          {selectedKeys === "all"
-            ? "All items selected"
-            : `${selectedKeys.size} of ${items.length} selected`}
-        </span>
       </div>
     )
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter])
+  }, [page, pages, hasSearchFilter])
 
   const classNames = React.useMemo(
     () => ({
@@ -311,38 +322,87 @@ export default function App() {
   )
 
   return (
-    <Table
-      isCompact
-      removeWrapper
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={classNames}
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Modal
+        backdrop={"blur"}
+        isOpen={false}
+        onClose={() => console.log("hello")}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Modifier
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+                <p>
+                  Magna exercitation reprehenderit magna aute tempor cupidatat
+                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
+                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
+                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
+                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
+                  eiusmod et. Culpa deserunt nostrud ad veniam.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Action
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      <Table
+        isCompact
+        removeWrapper
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        classNames={classNames}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={setSelectedKeys}
+        onSortChange={setSortDescriptor}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              align={column.uid === "actions" ? "center" : "start"}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          emptyContent={"Aucun utilisateur trouver..."}
+          items={sortedItems}
+        >
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey) as any}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </>
   )
 }

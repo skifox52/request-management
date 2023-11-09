@@ -22,9 +22,7 @@ export const registerUserAction = async (formData: TregisterSchema) => {
         id_group: data.id_group,
       },
     })
-    console.log("user added successfully")
   } catch (error: any) {
-    console.error("Error adding user")
-    throw new Error(error.message ?? error)
+    return { success: false, error: JSON.stringify(error) }
   }
 }
