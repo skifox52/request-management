@@ -4,6 +4,7 @@ import { Oswald } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
 import NavbarUI from "./component/NavbarUI"
 import { SessionProvider } from "next-auth/react"
+import { Toaster } from "react-hot-toast"
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
             </main>
           </SessionProvider>
         </NextUIProvider>
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   )

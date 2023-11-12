@@ -7,6 +7,10 @@ export const registerUserAction = async (formData: TregisterSchema) => {
     const parsedBody = registerSchema.safeParse(formData)
     if (!parsedBody.success) throw new Error("Unprocessable entity")
     const { data } = parsedBody
+    const usernameExist = await prismaClient.user.findFirst({
+      where: { OR: [{ username: data.username }, { email: data.email }] },
+    })
+    if (!!usernameExist) throw new Error("L'utilisateur existe déjà")
     await prismaClient.user.create({
       data: {
         email: data.email,
@@ -22,7 +26,9 @@ export const registerUserAction = async (formData: TregisterSchema) => {
         id_group: data.id_group,
       },
     })
+    return { success: true }
   } catch (error: any) {
-    return { success: false, error: JSON.stringify(error) }
+    console.log(error)
+    return { success: false, error: error?.message }
   }
 }

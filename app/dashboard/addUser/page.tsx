@@ -3,16 +3,15 @@ import { registerUserAction } from "@/app/actions/authActions"
 import ButtonUI from "@/app/component/ButtonUI"
 import InputUI from "@/app/component/InputUI"
 import SelectUI from "@/app/component/SelectUI"
-import ToastUI from "@/app/component/ToastUI"
 import { registerSchema, TregisterSchema } from "@/app/zod/registerSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import React, { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 
 interface pageProps {}
 
 const AddUser: React.FC<pageProps> = ({}) => {
-  const [success, setSuccess] = useState<boolean>(false)
   const formRef = useRef<HTMLFormElement | null>(null)
   const [formIntialData, setFormInitialData] = useState<{
     departement: { id: string; dep_name: string }[]
@@ -24,7 +23,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
       .then((response) => response.json())
       .then((data) => setFormInitialData(data))
       .catch((err) => {
-        throw new Error(err)
+        toast.error(err.message)
       })
   }, [])
 
@@ -40,17 +39,12 @@ const AddUser: React.FC<pageProps> = ({}) => {
   const addUser = async (data: TregisterSchema) => {
     try {
       const response = await registerUserAction(data)
-      console.log(window)
-      if (!response?.success) throw new Error(response?.error)
+      if (!response?.success) return toast.error(response?.error)
       reset()
       formRef.current?.reset()
-
-      setSuccess(true)
-      setTimeout(() => {
-        setSuccess(false)
-      }, 5000)
+      toast.success("Utilisateur ajouter avec succès")
     } catch (error: any) {
-      throw Error(error)
+      toast.error(error.message)
     }
   }
 
@@ -207,7 +201,8 @@ const AddUser: React.FC<pageProps> = ({}) => {
             value="Réinitialiser"
             className="font-bold w-full lg:text-lg text-white"
             onClick={() => {
-              throw new Error("error from reset button")
+              formRef.current?.reset()
+              reset()
             }}
           />
           <ButtonUI
@@ -220,9 +215,6 @@ const AddUser: React.FC<pageProps> = ({}) => {
           />
         </div>
       </form>
-      {success && (
-        <ToastUI title="Succès" body="Utilisateur ajouter avec succés" />
-      )}
     </>
   )
 }
