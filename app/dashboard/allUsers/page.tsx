@@ -1,5 +1,5 @@
 "use client"
-import React, { ReactNode, useEffect } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import {
   Table,
   TableHeader,
@@ -25,11 +25,12 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/react"
-import useSWR from "swr"
+import useSWR, { useSWRConfig } from "swr"
 import { columns, statusOptions } from "./data"
 import { capitalize } from "./utils"
 import { ChevronDown, MoreVertical, Search } from "lucide-react"
 import { TUser } from "@/app/api/users/all/route"
+import { disableUser, enableUser } from "@/app/actions/userActions"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -37,7 +38,13 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   vacation: "warning",
 }
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"]
+const INITIAL_VISIBLE_COLUMNS = [
+  "name",
+  "role",
+  "status",
+  "actions",
+  "username",
+]
 
 export default function App() {
   const userFetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -46,6 +53,8 @@ export default function App() {
     error,
     isLoading,
   } = useSWR<TUser[]>("/api/users/all", userFetcher)
+  //Revalidating data
+  const { mutate } = useSWRConfig()
 
   const [filterValue, setFilterValue] = React.useState("")
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]))
@@ -60,7 +69,7 @@ export default function App() {
   })
   const [page, setPage] = React.useState(1)
 
-  const pages = Math.ceil((users?.length as number) / rowsPerPage)
+  const pages = users && Math.ceil((users?.length as number) / rowsPerPage)
 
   const hasSearchFilter = Boolean(filterValue)
 
@@ -177,10 +186,26 @@ export default function App() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem onClick={() => console.log("edit")}>
+                <DropdownItem onClick={() => setOpenModal(true)}>
                   Modifier
                 </DropdownItem>
-                <DropdownItem>Supprimer</DropdownItem>
+                <DropdownItem
+                  color={user.isActive ? "warning" : "success"}
+                  onClick={
+                    user.isActive
+                      ? async () => {
+                          await disableUser(user.id)
+                          mutate("/api/users/all")
+                        }
+                      : async () => {
+                          await enableUser(user.id)
+                          mutate("/api/users/all")
+                        }
+                  }
+                >
+                  {user.isActive ? "Désactiver" : "Activer"}
+                </DropdownItem>
+                <DropdownItem color="danger">Supprimer</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -294,7 +319,7 @@ export default function App() {
           color="default"
           isDisabled={hasSearchFilter}
           page={page}
-          total={pages}
+          total={pages as number}
           variant="light"
           onChange={setPage}
         />
@@ -320,13 +345,13 @@ export default function App() {
     }),
     []
   )
-
+  const [opentModal, setOpenModal] = useState<boolean>(false)
   return (
     <>
       <Modal
         backdrop={"blur"}
-        isOpen={false}
-        onClose={() => console.log("hello")}
+        isOpen={opentModal}
+        onClose={() => setOpenModal(false)}
       >
         <ModalContent>
           {(onClose) => (
@@ -335,24 +360,7 @@ export default function App() {
                 Modifier
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <form action="#"></form>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
