@@ -1,6 +1,7 @@
 "use server"
 import prismaClient from "../utils/prismaClient"
 import { TregisterSchema, registerSchema } from "../zod/registerSchema"
+import { hash } from "bcrypt"
 
 export const registerUserAction = async (formData: TregisterSchema) => {
   try {
@@ -18,7 +19,7 @@ export const registerUserAction = async (formData: TregisterSchema) => {
         function: data.function,
         lastname: data.lastname,
         office_num: data.office_num,
-        password: data.password,
+        password: await hash(data.password, 12),
         phone: +data.phone,
         role: data.role,
         username: data.username,

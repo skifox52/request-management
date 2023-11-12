@@ -1,5 +1,5 @@
 "use client"
-import React, { ReactNode, useEffect, useState } from "react"
+import React, { ReactNode, useState } from "react"
 import {
   Table,
   TableHeader,
@@ -30,7 +30,9 @@ import { columns, statusOptions } from "./data"
 import { capitalize } from "./utils"
 import { ChevronDown, MoreVertical, Search } from "lucide-react"
 import { TUser } from "@/app/api/users/all/route"
-import { disableUser, enableUser } from "@/app/actions/userActions"
+import { deleteUser, disableUser, enableUser } from "@/app/actions/userActions"
+import InputUI from "@/app/component/InputUI"
+import { useForm } from "react-hook-form"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -62,6 +64,7 @@ export default function App() {
     new Set(INITIAL_VISIBLE_COLUMNS)
   )
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all")
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "age",
@@ -173,7 +176,7 @@ export default function App() {
             size="sm"
             variant="dot"
           >
-            {user.isActive ? "actif" : "paused"}
+            {user.isActive ? "actif" : "inactif"}
           </Chip>
         )
       case "actions":
@@ -187,7 +190,7 @@ export default function App() {
               </DropdownTrigger>
               <DropdownMenu>
                 <DropdownItem onClick={() => setOpenModal(true)}>
-                  Modifier
+                  Changer le mot de passe
                 </DropdownItem>
                 <DropdownItem
                   color={user.isActive ? "warning" : "success"}
@@ -205,7 +208,14 @@ export default function App() {
                 >
                   {user.isActive ? "Désactiver" : "Activer"}
                 </DropdownItem>
-                <DropdownItem color="danger">Supprimer</DropdownItem>
+                <DropdownItem
+                  color="danger"
+                  onClick={() => {
+                    setConfirmDelete(true), setCurrentUserId(user.id)
+                  }}
+                >
+                  Supprimer
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -215,14 +225,6 @@ export default function App() {
         return cellValue
     }
   }, [])
-
-  const onRowsPerPageChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setRowsPerPage(Number(e.target.value))
-      setPage(1)
-    },
-    []
-  )
 
   const onSearchChange = React.useCallback((value?: string) => {
     if (value) {
@@ -345,7 +347,15 @@ export default function App() {
     }),
     []
   )
+  //--------------------------------------------------------------------------------------------------------
+  const {
+    register,
+    formState: { errors },
+  } = useForm<{ password: string; confirmPassword: string }>({
+    defaultValues: { password: "", confirmPassword: "" },
+  })
   const [opentModal, setOpenModal] = useState<boolean>(false)
+  const [confirmDelete, setConfirmDelete] = useState<boolean>(false)
   return (
     <>
       <Modal
@@ -357,24 +367,78 @@ export default function App() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modifier
+                Changer le mot de passe
               </ModalHeader>
               <ModalBody>
-                <form action="#"></form>
+                <form action="#" className="flex flex-col gap-4">
+                  <InputUI
+                    {...register("password", { required: true, minLength: 8 })}
+                    label="nouveau mot de passe"
+                    size="sm"
+                    type="password"
+                    variant="underlined"
+                    color="default"
+                    isInvalid={!!errors.password}
+                    errorMessage={errors.password?.message}
+                  />
+                  <InputUI
+                    {...register("confirmPassword", {
+                      required: true,
+                      minLength: 8,
+                    })}
+                    label="Confirmer mot de passe"
+                    size="sm"
+                    type="password"
+                    variant="underlined"
+                    color="default"
+                    isInvalid={!!errors.confirmPassword}
+                    errorMessage={errors.confirmPassword?.message}
+                  />
+                  <Button color="primary" type="submit" size="sm">
+                    Appliquer
+                  </Button>
+                </form>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-
+      <Modal
+        backdrop={"blur"}
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex text-md flex-col gap-1">
+                Voulez vous vraiment supprimer cet utilisateur?
+              </ModalHeader>
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={async () => {
+                    await deleteUser(currentUserId as string)
+                    onClose()
+                    mutate("/api/users/all")
+                  }}
+                >
+                  Oui
+                </Button>
+                <Button color="primary" onPress={onClose}>
+                  Non
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <Table
         isCompact
         removeWrapper

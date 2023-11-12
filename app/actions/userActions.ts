@@ -25,3 +25,15 @@ export const enableUser = async (id: string) => {
     }
   }
 }
+
+export const deleteUser = async (id: string) => {
+  try {
+    await prismaClient.user.delete({ where: { id } })
+    return { success: true }
+  } catch (error) {
+    return {
+      success: false,
+      message: "Une erreur est survenue, veuillez réessayer ultérieurement",
+    }
+  }
+}

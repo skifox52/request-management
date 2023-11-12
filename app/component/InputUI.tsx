@@ -8,8 +8,10 @@ interface TInputUI {
   size: "sm" | "md" | "lg"
   className?: string
   isInvalid?: boolean
+  isDisabled?: boolean
   errorMessage?: string
   startContent?: string
+  value?: string
   variant: "flat" | "bordered" | "underlined" | "faded"
   color:
     | "secondary"
@@ -35,6 +37,8 @@ const InputUI: ForwardRefRenderFunction<
     errorMessage,
     isInvalid,
     startContent,
+    isDisabled,
+    value,
     ...props
   },
   ref
@@ -51,6 +55,8 @@ const InputUI: ForwardRefRenderFunction<
       isInvalid={isInvalid}
       errorMessage={errorMessage}
       startContent={startContent}
+      value={value}
+      isDisabled={isDisabled}
       {...props}
     />
   )
