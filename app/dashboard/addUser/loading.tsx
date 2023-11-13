@@ -1,4 +1,4 @@
-import Spinner from "@/app/component/Spinner"
+import Spinner from "@/app/component/ui/Spinner"
 import { Skeleton } from "@nextui-org/react"
 import React from "react"
 

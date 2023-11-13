@@ -2,7 +2,7 @@
 import "./globals.css"
 import { Oswald } from "next/font/google"
 import { NextUIProvider } from "@nextui-org/react"
-import NavbarUI from "./component/NavbarUI"
+import NavbarUI from "./component/ui/NavbarUI"
 import { SessionProvider } from "next-auth/react"
 import { Toaster } from "react-hot-toast"
 

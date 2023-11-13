@@ -29,7 +29,12 @@ export const registerUserAction = async (formData: TregisterSchema) => {
     })
     return { success: true }
   } catch (error: any) {
-    console.log(error)
     return { success: false, error: error?.message }
   }
+}
+
+export const fetchUser = async () => {
+  return await prismaClient.user.findMany({
+    select: { username: true, role: true, isActive: true },
+  })
 }

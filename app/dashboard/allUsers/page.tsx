@@ -36,9 +36,9 @@ import {
   enableUser,
   updatePasswordById,
 } from "@/app/actions/userActions"
-import InputUI from "@/app/component/InputUI"
+import InputUI from "@/app/component/ui/InputUI"
 import { useForm } from "react-hook-form"
-import Spinner from "@/app/component/Spinner"
+import Spinner from "@/app/component/ui/Spinner"
 import toast from "react-hot-toast"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -60,7 +60,7 @@ export default function App() {
   const {
     data: users,
     error,
-    isLoading,
+    isLoading: loadingUsers,
   } = useSWR<TUser[]>("/api/users/all", userFetcher)
   //Revalidating data
   const { mutate } = useSWRConfig()
@@ -128,116 +128,121 @@ export default function App() {
     })
   }, [sortDescriptor, items])
 
-  const renderCell = React.useCallback((user: TUser, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof TUser]
+  const renderCell = React.useCallback(
+    (user: TUser, columnKey: React.Key) => {
+      const cellValue = user[columnKey as keyof TUser]
 
-    switch (columnKey) {
-      case "name":
-        return (
-          <User
-            classNames={{
-              description: "text-default-500",
-            }}
-            name={user.lastname}
-          >
-            {user.lastname}
-          </User>
-        )
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">
-              {cellValue as ReactNode}
-            </p>
-          </div>
-        )
-      case "departement":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">
-              {user.departement.dep_name}
-            </p>
-          </div>
-        )
-      case "groupe":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">
-              {user.group.libelle}
-            </p>
-          </div>
-        )
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">
-              {cellValue as ReactNode}
-            </p>
-          </div>
-        )
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[user.isActive === true ? "active" : "paused"]}
-            size="sm"
-            variant="dot"
-          >
-            {user.isActive ? "actif" : "inactif"}
-          </Chip>
-        )
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown className="bg-primary border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <MoreVertical className="text-default-400" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem
-                  onClick={() => {
-                    setOpenModal(true)
-                    setCurrentUserId(user.id)
-                  }}
-                >
-                  Changer le mot de passe
-                </DropdownItem>
-                <DropdownItem
-                  color={user.isActive ? "warning" : "success"}
-                  onClick={
-                    user.isActive
-                      ? async () => {
-                          await disableUser(user.id)
-                          mutate("/api/users/all")
-                        }
-                      : async () => {
-                          await enableUser(user.id)
-                          mutate("/api/users/all")
-                        }
-                  }
-                >
-                  {user.isActive ? "Désactiver" : "Activer"}
-                </DropdownItem>
-                <DropdownItem
-                  color="danger"
-                  onClick={() => {
-                    setConfirmDelete(true)
-                    setCurrentUserId(user.id)
-                  }}
-                >
-                  Supprimer
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        )
+      switch (columnKey) {
+        case "name":
+          return (
+            <User
+              classNames={{
+                description: "text-default-500",
+              }}
+              name={user.lastname}
+            >
+              {user.lastname}
+            </User>
+          )
+        case "role":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">
+                {cellValue as ReactNode}
+              </p>
+            </div>
+          )
+        case "departement":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">
+                {user.departement.dep_name}
+              </p>
+            </div>
+          )
+        case "groupe":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">
+                {user.group.libelle}
+              </p>
+            </div>
+          )
+        case "role":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">
+                {cellValue as ReactNode}
+              </p>
+            </div>
+          )
+        case "status":
+          return (
+            <Chip
+              className="capitalize border-none gap-1 text-default-600"
+              color={
+                statusColorMap[user.isActive === true ? "active" : "paused"]
+              }
+              size="sm"
+              variant="dot"
+            >
+              {user.isActive ? "actif" : "inactif"}
+            </Chip>
+          )
+        case "actions":
+          return (
+            <div className="relative flex justify-end items-center gap-2">
+              <Dropdown className="bg-primary border-1 border-default-200">
+                <DropdownTrigger>
+                  <Button isIconOnly radius="full" size="sm" variant="light">
+                    <MoreVertical className="text-default-400" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu>
+                  <DropdownItem
+                    onClick={() => {
+                      setOpenModal(true)
+                      setCurrentUserId(user.id)
+                    }}
+                  >
+                    Changer le mot de passe
+                  </DropdownItem>
+                  <DropdownItem
+                    color={user.isActive ? "warning" : "success"}
+                    onClick={
+                      user.isActive
+                        ? async () => {
+                            await disableUser(user.id)
+                            mutate("/api/users/all")
+                          }
+                        : async () => {
+                            await enableUser(user.id)
+                            mutate("/api/users/all")
+                          }
+                    }
+                  >
+                    {user.isActive ? "Désactiver" : "Activer"}
+                  </DropdownItem>
+                  <DropdownItem
+                    color="danger"
+                    onClick={() => {
+                      setConfirmDelete(true)
+                      setCurrentUserId(user.id)
+                    }}
+                  >
+                    Supprimer
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          )
 
-      default:
-        return cellValue
-    }
-  }, [])
+        default:
+          return cellValue
+      }
+    },
+    [mutate]
+  )
 
   const onSearchChange = React.useCallback((value?: string) => {
     if (value) {
@@ -364,7 +369,7 @@ export default function App() {
   type TChangePasswordFormData = { password: string; confirmPassword: string }
   const {
     register,
-    formState: { errors, isLoading: loadingPassword },
+    formState: { errors, isSubmitting },
     handleSubmit,
     watch,
     reset,
@@ -439,15 +444,11 @@ export default function App() {
                   />
                   <Button
                     color="primary"
-                    isDisabled={loadingPassword}
+                    isDisabled={isSubmitting}
                     type="submit"
                     size="sm"
                   >
-                    {loadingPassword ? (
-                      <Spinner color="primary" />
-                    ) : (
-                      "Appliquer"
-                    )}
+                    {isSubmitting ? <Spinner color="secondary" /> : "Appliquer"}
                   </Button>
                 </form>
               </ModalBody>
@@ -515,7 +516,13 @@ export default function App() {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={"Aucun utilisateur trouver..."}
+          emptyContent={
+            loadingUsers ? (
+              <Spinner color="default" />
+            ) : (
+              "Aucun utilisateur trouver..."
+            )
+          }
           items={sortedItems}
         >
           {(item) => (
