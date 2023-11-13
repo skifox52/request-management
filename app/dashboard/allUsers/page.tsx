@@ -30,9 +30,16 @@ import { columns, statusOptions } from "./data"
 import { capitalize } from "./utils"
 import { ChevronDown, MoreVertical, Search } from "lucide-react"
 import { TUser } from "@/app/api/users/all/route"
-import { deleteUser, disableUser, enableUser } from "@/app/actions/userActions"
+import {
+  deleteUser,
+  disableUser,
+  enableUser,
+  updatePasswordById,
+} from "@/app/actions/userActions"
 import InputUI from "@/app/component/InputUI"
 import { useForm } from "react-hook-form"
+import Spinner from "@/app/component/Spinner"
+import toast from "react-hot-toast"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -65,7 +72,7 @@ export default function App() {
   )
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all")
   const [currentUserId, setCurrentUserId] = useState<string | null>(null)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
     column: "age",
     direction: "ascending",
@@ -189,7 +196,12 @@ export default function App() {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu>
-                <DropdownItem onClick={() => setOpenModal(true)}>
+                <DropdownItem
+                  onClick={() => {
+                    setOpenModal(true)
+                    setCurrentUserId(user.id)
+                  }}
+                >
                   Changer le mot de passe
                 </DropdownItem>
                 <DropdownItem
@@ -211,7 +223,8 @@ export default function App() {
                 <DropdownItem
                   color="danger"
                   onClick={() => {
-                    setConfirmDelete(true), setCurrentUserId(user.id)
+                    setConfirmDelete(true)
+                    setCurrentUserId(user.id)
                   }}
                 >
                   Supprimer
@@ -347,32 +360,57 @@ export default function App() {
     }),
     []
   )
-  //--------------------------------------------------------------------------------------------------------
+  //Change password section
+  type TChangePasswordFormData = { password: string; confirmPassword: string }
   const {
     register,
-    formState: { errors },
-  } = useForm<{ password: string; confirmPassword: string }>({
+    formState: { errors, isLoading: loadingPassword },
+    handleSubmit,
+    watch,
+    reset,
+  } = useForm<TChangePasswordFormData>({
     defaultValues: { password: "", confirmPassword: "" },
   })
   const [opentModal, setOpenModal] = useState<boolean>(false)
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false)
+  //Change password handler
+  const changePasswordHandler = async (data: TChangePasswordFormData) => {
+    try {
+      await updatePasswordById(currentUserId as string, data.password)
+      reset()
+      toast.success("Mot de passe changer avec succès")
+      setOpenModal(false)
+    } catch (error: any) {
+      reset()
+      toast.error(error.message)
+    }
+  }
   return (
     <>
       <Modal
         backdrop={"blur"}
         isOpen={opentModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => {
+          reset()
+          setOpenModal(false)
+        }}
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-col gap-1 text-center">
                 Changer le mot de passe
               </ModalHeader>
               <ModalBody>
-                <form action="#" className="flex flex-col gap-4">
+                <form
+                  onSubmit={handleSubmit(changePasswordHandler)}
+                  className="flex flex-col gap-4"
+                >
                   <InputUI
-                    {...register("password", { required: true, minLength: 8 })}
+                    {...register("password", {
+                      required: { value: true, message: "Champ obligatoire" },
+                      minLength: { value: 8, message: "Minimum 8 aractères" },
+                    })}
                     label="nouveau mot de passe"
                     size="sm"
                     type="password"
@@ -383,8 +421,13 @@ export default function App() {
                   />
                   <InputUI
                     {...register("confirmPassword", {
-                      required: true,
-                      minLength: 8,
+                      required: { value: true, message: "Champ obligatoire" },
+                      minLength: { value: 8, message: "Minimum 8 aractères" },
+                      validate: (value: string) => {
+                        if (String(watch("password")) !== String(value)) {
+                          return "Verifier vos mot de passe"
+                        }
+                      },
                     })}
                     label="Confirmer mot de passe"
                     size="sm"
@@ -394,8 +437,17 @@ export default function App() {
                     isInvalid={!!errors.confirmPassword}
                     errorMessage={errors.confirmPassword?.message}
                   />
-                  <Button color="primary" type="submit" size="sm">
-                    Appliquer
+                  <Button
+                    color="primary"
+                    isDisabled={loadingPassword}
+                    type="submit"
+                    size="sm"
+                  >
+                    {loadingPassword ? (
+                      <Spinner color="primary" />
+                    ) : (
+                      "Appliquer"
+                    )}
                   </Button>
                 </form>
               </ModalBody>
