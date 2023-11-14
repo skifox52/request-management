@@ -1,5 +1,12 @@
 "use client"
-import { Gauge, ListOrdered, PanelRight, PlusCircle, Users } from "lucide-react"
+import {
+  Gauge,
+  HardDrive,
+  ListOrdered,
+  PanelRight,
+  PlusCircle,
+  Users,
+} from "lucide-react"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 
@@ -101,20 +108,9 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
               data-te-sidenav-link-ref
             >
               <span className="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="h-4 w-4"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 00-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 01-.189-.866c0-.298.059-.605.189-.866zm2.023 6.828a.75.75 0 10-1.06-1.06 3.75 3.75 0 01-5.304 0 .75.75 0 00-1.06 1.06 5.25 5.25 0 007.424 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <HardDrive />
               </span>
-              <span>Category 2</span>
+              <span>Equipement</span>
               <span
                 className="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:[&>svg]:text-gray-300"
                 data-te-sidenav-rotate-icon-ref
@@ -134,30 +130,37 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
               </span>
             </a>
             <ul
-              className="show !visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
+              className="!visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
               data-te-sidenav-collapse-ref
             >
               <li className="relative">
-                <a
+                <Link
+                  href={"/dashboard/addEquipment"}
                   className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                   data-te-sidenav-link-ref
                 >
-                  Link 4
-                </a>
+                  <span className="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
+                    <PlusCircle />
+                  </span>
+                  <span>Ajouter</span>
+                </Link>
               </li>
               <li className="relative">
-                <a
+                <Link
+                  href={"/dashboard/allUsers"}
                   className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                   data-te-sidenav-link-ref
                 >
-                  Link 5
-                </a>
+                  <span className="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
+                    <ListOrdered />
+                  </span>
+                  Afficher
+                </Link>
               </li>
             </ul>
           </li>
         </ul>
       </nav>
-
       <button
         className="absolute h-fit bottom-8 md:top-8 -translate-y-1/2 z-[9999999] rounded px-6 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
         data-te-sidenav-toggle-ref

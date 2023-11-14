@@ -1,28 +1,22 @@
 "use server"
 import React from "react"
 import { Card, CardBody } from "@nextui-org/react"
+import { AuthOptions } from "next-auth"
+import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import prismaClient from "@/app/utils/prismaClient"
 import { TUser } from "@/app/api/users/all/route"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 interface pageProps {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
 const Page: React.FC<pageProps> = async ({ searchParams }) => {
-  if (
-    !("user_id" in searchParams) ||
-    !searchParams.user_id
-      ?.toString()
-      .match(
-        /[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/
-      )
-  )
-    redirect("/home")
-
+  const session = await getServerSession(authOptions)
   const data: (TUser & { office_num: number }) | null =
     await prismaClient.user.findFirst({
-      where: { id: searchParams?.user_id as string },
+      where: { id: session?.user.id },
       include: {
         departement: { select: { dep_name: true } },
         group: { select: { libelle: true } },

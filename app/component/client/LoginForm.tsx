@@ -52,9 +52,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
           "Compte désactiver, merci de contacter votre administrateur"
         )
       if (user.role === "admin") {
-        router.push("/dashboard")
+        router.replace("/dashboard")
       } else {
-        router.push("/home")
+        router.replace("/home")
       }
     } catch (error: any) {
       toast.error(error.message)

@@ -6,7 +6,7 @@ import { compare } from "bcrypt"
 import NextAuth from "next-auth"
 import prismaClient from "@/app/utils/prismaClient"
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
