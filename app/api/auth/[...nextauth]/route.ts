@@ -39,6 +39,7 @@ const authOptions: AuthOptions = {
   callbacks: {
     session: ({ session, token }) => {
       session.user.id = token.id
+      session.user.role = token?.role
       return session
     },
     jwt: ({ user, account, token }) => {
