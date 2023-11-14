@@ -17,6 +17,15 @@ interface TButtonUI {
   type?: "button" | "submit" | "reset" | undefined
   className?: string
   isLoading?: boolean
+  variant?:
+    | "shadow"
+    | "solid"
+    | "bordered"
+    | "light"
+    | "flat"
+    | "faded"
+    | "ghost"
+    | undefined
   onClick?: () => void
 }
 
@@ -27,12 +36,13 @@ export default function ButtonUI({
   type,
   className,
   isLoading,
+  variant,
   onClick,
 }: TButtonUI) {
   return (
     <Button
       isDisabled={isDisabled}
-      variant="shadow"
+      variant={variant ?? "shadow"}
       type={type}
       color={color}
       className={className}

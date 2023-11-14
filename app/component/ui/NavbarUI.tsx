@@ -55,7 +55,10 @@ export default function NavbarUI() {
             </Link>
           </NavbarItem>
           <NavbarItem isActive={path === "/home/profil"}>
-            <Link color="foreground" href="/home/profil">
+            <Link
+              color="foreground"
+              href={"/home/profil?user_id=" + data.user.id}
+            >
               Profil
             </Link>
           </NavbarItem>
@@ -65,8 +68,9 @@ export default function NavbarUI() {
         <NavbarContent justify="end">
           <NavbarItem className="hidden lg:flex">
             <ButtonUI
-              value="Logout"
-              color="warning"
+              value="Se déconnecter"
+              color="default"
+              variant="ghost"
               onClick={() =>
                 signOut({ redirect: false }).then(() => router.push("/"))
               }
