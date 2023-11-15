@@ -55,18 +55,16 @@ const AddUser: React.FC<pageProps> = ({}) => {
         className="grid lg:grid-cols-2 xl:grid-cols-3 text-black gap-6"
         ref={formRef}
       >
-        <div>
-          <InputUI
-            {...register("lastname")}
-            label="Nom"
-            size="sm"
-            type="text"
-            variant="faded"
-            color="primary"
-            isInvalid={!!errors.lastname}
-            errorMessage={errors.lastname?.message}
-          />
-        </div>
+        <InputUI
+          {...register("lastname")}
+          label="Nom"
+          size="sm"
+          type="text"
+          variant="faded"
+          color="primary"
+          isInvalid={!!errors.lastname}
+          errorMessage={errors.lastname?.message}
+        />
         <InputUI
           {...register("firstname")}
           label="Prénom"

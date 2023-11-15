@@ -58,7 +58,7 @@ model Equipement {
   id_user String 
   id_equipement String
   caracteristique String?
-  date_aquisition DateTime
+  date_aquisition DateTime @default(now())
   date_fin_garantie DateTime
   date_sortie DateTime
   image String?

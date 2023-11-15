@@ -14,6 +14,11 @@ export function FileUpdate() {
         width={200}
         height={200}
         value={file}
+        dropzoneOptions={{
+          maxFiles: 1,
+          maxSize: 1024 * 1024 * 2.5,
+          multiple: false,
+        }}
         onChange={(file) => {
           setFile(file)
         }}

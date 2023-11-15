@@ -25,13 +25,13 @@ type InputProps = {
 }
 const ERROR_MESSAGES = {
   fileTooLarge(maxSize: number) {
-    return `The file is too large. Max size is ${formatFileSize(maxSize)}.`
+    return `Fichier volumineux, ne pas dépasser ${formatFileSize(maxSize)}.`
   },
   fileInvalidType() {
     return "Invalid file type."
   },
   tooManyFiles(maxFiles: number) {
-    return `You can only add ${maxFiles} file(s).`
+    return `Vous pouvez ajouter que ${maxFiles} fichier.`
   },
   fileNotSupported() {
     return "The file is not supported."
