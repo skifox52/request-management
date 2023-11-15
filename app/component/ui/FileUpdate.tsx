@@ -3,11 +3,13 @@ import { SingleImageDropzone } from "./SingleImageDropZone"
 import { useEdgeStore } from "../../utils/edgestore"
 import { useState } from "react"
 import ButtonUI from "./ButtonUI"
+import { Progress } from "@nextui-org/react"
 export function FileUpdate() {
   const [file, setFile] = useState<File>()
+  const [progress, setProgress] = useState<number>(0)
   const { edgestore } = useEdgeStore()
   return (
-    <div>
+    <div className="w-fit h-fit">
       <SingleImageDropzone
         width={200}
         height={200}
@@ -16,10 +18,21 @@ export function FileUpdate() {
           setFile(file)
         }}
       />
-      <ButtonUI
+      {progress > 0 && (
+        <Progress
+          aria-label="Loading..."
+          value={progress}
+          size="sm"
+          className="max-w-[200px] mt-2"
+          color="warning"
+        />
+      )}
+      {/* <ButtonUI
         variant="ghost"
         color="default"
         value="upload"
+        className="w-[200px] mt-2"
+        size="sm"
         onClick={async () => {
           if (file) {
             const res = await edgestore.myImages.upload({
@@ -27,6 +40,7 @@ export function FileUpdate() {
               onProgressChange: (progress) => {
                 // you can use this to show a progress bar
                 console.log(progress)
+                setProgress(progress)
               },
             })
             // you can run some server action or api here
@@ -34,7 +48,7 @@ export function FileUpdate() {
             console.log(res)
           }
         }}
-      />
+      /> */}
     </div>
   )
 }
