@@ -58,7 +58,6 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
           thumbnailUrl: res.thumbnailUrl,
         })
       }
-      console.log(imagePath, typeof imagePath)
       await addEquipmentAction({
         caracteristique: data.caracteristique,
         date_fin_garantie: data.date_fin_garantie,
