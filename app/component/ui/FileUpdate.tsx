@@ -1,13 +1,17 @@
 "use client"
 import { SingleImageDropzone } from "./SingleImageDropZone"
-import { useEdgeStore } from "../../utils/edgestore"
-import { useState } from "react"
-import ButtonUI from "./ButtonUI"
+import { Dispatch, SetStateAction } from "react"
 import { Progress } from "@nextui-org/react"
-export function FileUpdate() {
-  const [file, setFile] = useState<File>()
-  const [progress, setProgress] = useState<number>(0)
-  const { edgestore } = useEdgeStore()
+
+export function FileUpdate({
+  imageProgress,
+  file,
+  setFile,
+}: {
+  imageProgress: number
+  file: File | undefined
+  setFile: Dispatch<SetStateAction<File | undefined>>
+}) {
   return (
     <div className="w-fit h-fit">
       <SingleImageDropzone
@@ -23,37 +27,15 @@ export function FileUpdate() {
           setFile(file)
         }}
       />
-      {progress > 0 && (
+      {imageProgress > 0 && (
         <Progress
           aria-label="Loading..."
-          value={progress}
+          value={imageProgress}
           size="sm"
-          className="max-w-[200px] mt-2"
-          color="warning"
+          className="max-w-[200px] mt-3"
+          color="success"
         />
       )}
-      {/* <ButtonUI
-        variant="ghost"
-        color="default"
-        value="upload"
-        className="w-[200px] mt-2"
-        size="sm"
-        onClick={async () => {
-          if (file) {
-            const res = await edgestore.myImages.upload({
-              file,
-              onProgressChange: (progress) => {
-                // you can use this to show a progress bar
-                console.log(progress)
-                setProgress(progress)
-              },
-            })
-            // you can run some server action or api here
-            // to add the necessary data to your database
-            console.log(res)
-          }
-        }}
-      /> */}
     </div>
   )
 }

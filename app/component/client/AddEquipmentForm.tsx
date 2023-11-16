@@ -12,10 +12,14 @@ import {
   addEquipmentSchema,
 } from "@/app/zod/addEquipmentSchema"
 import { addEquipmentAction } from "@/app/actions/equipmentActions"
+import { useEdgeStore } from "@/app/utils/edgestore"
 
 interface AddEquipmentFormProps {}
 
 const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
+  const [imageProgess, setImageProgress] = useState<number>(0)
+  const { edgestore } = useEdgeStore()
+  const [file, setFile] = useState<File>()
   const formRef = useRef<HTMLFormElement | null>(null)
   const [formIntialData, setFormInitialData] = useState<{
     equipement: { id: string; libelle: string }[]
@@ -39,21 +43,41 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
     resolver: zodResolver(addEquipmentSchema),
   })
 
-  const addUser = async (data: TaddEquipmentSchema) => {
+  const addEquipment = async (data: TaddEquipmentSchema) => {
+    let imagePath: string | null = null
     try {
-      const response = await addEquipmentAction(data)
+      if (file) {
+        const res = await edgestore.myImages.upload({
+          file,
+          onProgressChange: (progress) => {
+            setImageProgress(progress)
+          },
+        })
+        imagePath = JSON.stringify({
+          url: res.url,
+          thumbnailUrl: res.thumbnailUrl,
+        })
+      }
+      console.log(imagePath, typeof imagePath)
+      await addEquipmentAction({
+        caracteristique: data.caracteristique,
+        date_fin_garantie: data.date_fin_garantie,
+        date_sortie: data.date_sortie,
+        id_equipement: data.id_equipement,
+        id_user: data.id_user,
+        image: imagePath,
+      })
       reset()
       formRef.current?.reset()
-      toast.success("Utilisateur ajouter avec succès")
+      toast.success("Equipement ajouter avec succès")
     } catch (error: any) {
       toast.error(error.message)
     }
   }
-
   return (
     <>
       <form
-        onSubmit={handleSubmit(addUser)}
+        onSubmit={handleSubmit(addEquipment)}
         className="flex mx-auto bg-content1 rounded-lg border border-default p-8 shadow-lg shadow-primary flex-col max-w-xl text-black gap-6"
         ref={formRef}
       >
@@ -80,15 +104,15 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
           errorMessage={errors.date_sortie?.message}
         />
         <InputUI
-          {...register("id_equipement")}
-          label="Numéro de serie"
-          size="sm"
+          {...register("date_fin_garantie")}
+          label=""
+          size="lg"
+          type="date"
           variant="faded"
-          className="text-black"
+          className="text-black relative before:content-['Date-fin-garantie'] before:right-12 before:top-6 before:-translate-y-1/2 before:absolute before:z-50  before:block"
           color="primary"
-          type="text"
-          isInvalid={!!errors.id_equipement}
-          errorMessage={errors.id_equipement?.message}
+          isInvalid={!!errors.date_sortie}
+          errorMessage={errors.date_sortie?.message}
         />
         <SelectUI
           {...register("id_equipement")}
@@ -127,13 +151,18 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
           errorMessage={errors.id_user?.message}
         />
         <div className="col-span-3">
-          <FileUpdate />
+          <FileUpdate
+            imageProgress={imageProgess}
+            file={file}
+            setFile={setFile}
+          />
         </div>
         <div className="flex gap-6 w-full lg:col-span-2 xl:col-span-3">
           <ButtonUI
             color="primary"
             value="Réinitialiser"
             className="font-bold w-full lg:text-lg text-white"
+            isDisabled={isSubmitting}
             onClick={() => {
               formRef.current?.reset()
               reset()
@@ -142,7 +171,8 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
           <ButtonUI
             color="default"
             value="Affecter"
-            className="font-bold lg:text-lg w-full text-white"
+            variant="ghost"
+            className={`font-bold lg:text-lg w-full text-white `}
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
             type="submit"
