@@ -8,6 +8,10 @@ export type TEquipment = {
   typeEquipement: {
     libelle: string
   }
+  user: {
+    firstname: string
+    lastname: string
+  }
 } & {
   id: string
   id_user: string
@@ -18,13 +22,17 @@ export type TEquipment = {
   date_aquisition: Date
   date_fin_garantie: Date
   date_sortie: Date
-  image: string | null
+  image: string
 }
-
 const page: React.FC<pageProps> = async ({}) => {
   const equipments = await prismaClient.equipement.findMany({
-    include: { typeEquipement: { select: { libelle: true } } },
+    orderBy: [{ libelle: "asc" }],
+    include: {
+      typeEquipement: { select: { libelle: true } },
+      user: { select: { firstname: true, lastname: true } },
+    },
   })
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {equipments.map((eq) => (
