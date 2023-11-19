@@ -57,7 +57,7 @@ model Equipement {
   id String @id @default(uuid())
   id_user String 
   id_equipement String
-  numero_de_serie Int
+  numero_de_serie String
   libelle String
   caracteristique String?
   date_aquisition DateTime @default(now())

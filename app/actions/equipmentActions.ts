@@ -12,8 +12,9 @@ export const addEquipmentAction = async (data: TaddEquipmentSchema) => {
         date_fin_garantie: data.date_fin_garantie,
         id_user: data.id_user,
         id_equipement: data.id_equipement,
-        libelle: "",
-        numero_de_serie: 9,
+        date_aquisition: data.date_aquisition,
+        libelle: data.libelle,
+        numero_de_serie: data.numero_de_serie,
         image: data.image,
       },
     })

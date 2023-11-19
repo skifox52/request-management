@@ -1,13 +1,13 @@
-import { Skeleton } from "@nextui-org/react"
+import Spinner from "@/app/component/ui/Spinner"
 import React from "react"
 
 interface loadingProps {}
 
 const loading: React.FC<loadingProps> = ({}) => {
   return (
-    <Skeleton className="rounded-lg border border-white/10 shadow-lg shadow-black">
-      <div className="h-[450px] rounded-lg"></div>
-    </Skeleton>
+    <div className="h-[60vh] flex items-center justify-center">
+      <Spinner color="default" />
+    </div>
   )
 }
 export default loading

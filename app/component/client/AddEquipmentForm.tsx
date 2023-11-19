@@ -65,6 +65,9 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
         id_equipement: data.id_equipement,
         id_user: data.id_user,
         image: imagePath,
+        libelle: data.libelle,
+        numero_de_serie: data.numero_de_serie,
+        date_aquisition: data.date_aquisition,
       })
       reset()
       formRef.current?.reset()
@@ -80,6 +83,28 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
         className="flex mx-auto bg-content1 rounded-lg border border-default p-8 shadow-lg shadow-primary flex-col max-w-xl text-black gap-6"
         ref={formRef}
       >
+        <InputUI
+          {...register("libelle")}
+          label="Modèle"
+          size="sm"
+          type="text"
+          variant="faded"
+          className="text-black"
+          color="primary"
+          isInvalid={!!errors.libelle}
+          errorMessage={errors.libelle?.message}
+        />
+        <InputUI
+          {...register("numero_de_serie")}
+          label="Numéro de serie"
+          size="sm"
+          type="number"
+          variant="faded"
+          className="text-black"
+          color="primary"
+          isInvalid={!!errors.numero_de_serie}
+          errorMessage={errors.numero_de_serie?.message}
+        />
         <InputUI
           {...register("caracteristique")}
           label="Caractéristiques"
@@ -101,6 +126,17 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
           color="primary"
           isInvalid={!!errors.date_sortie}
           errorMessage={errors.date_sortie?.message}
+        />
+        <InputUI
+          {...register("date_aquisition")}
+          label=""
+          size="lg"
+          type="date"
+          variant="faded"
+          className="text-black relative before:content-['Date-aquisition'] before:right-12 before:top-6 before:-translate-y-1/2 before:absolute before:z-50  before:block"
+          color="primary"
+          isInvalid={!!errors.date_aquisition}
+          errorMessage={errors.date_aquisition?.message}
         />
         <InputUI
           {...register("date_fin_garantie")}
