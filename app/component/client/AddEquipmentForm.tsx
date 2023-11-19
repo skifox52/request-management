@@ -64,7 +64,7 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
         date_sortie: data.date_sortie,
         id_equipement: data.id_equipement,
         id_user: data.id_user,
-        image: imagePath,
+        image: imagePath ?? "/placeholder-wire-image-dark.png",
         libelle: data.libelle,
         numero_de_serie: data.numero_de_serie,
         date_aquisition: data.date_aquisition,
@@ -73,6 +73,7 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
       formRef.current?.reset()
       toast.success("Equipement ajouter avec succès")
     } catch (error: any) {
+      console.log(error)
       toast.error(error.message)
     }
   }

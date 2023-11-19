@@ -15,7 +15,7 @@ export const addEquipmentAction = async (data: TaddEquipmentSchema) => {
         date_aquisition: data.date_aquisition,
         libelle: data.libelle,
         numero_de_serie: data.numero_de_serie,
-        image: data.image,
+        image: data.image as string,
       },
     })
   } catch (error: any) {

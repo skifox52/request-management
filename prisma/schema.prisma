@@ -63,7 +63,7 @@ model Equipement {
   date_aquisition DateTime @default(now())
   date_fin_garantie DateTime
   date_sortie DateTime
-  image String? @db.LongText
+  image String @db.LongText
   typeEquipement TypeEquipement @relation(fields: [id_equipement], references: [id])
   user User @relation(fields: [id_user],references: [id])
   demandeIntervention DemandeIntervention[]
