@@ -4,10 +4,11 @@ import { Select, SelectItem } from "@nextui-org/react"
 
 interface TSelect {
   data: { value: string | number; label: string }[]
-  selectLabel: string
+  selectLabel?: string
   className?: string
   isInvalid?: boolean
   errorMessage?: string
+  startContent?: any
   variant: "flat" | "bordered" | "underlined" | "faded"
   size: "sm" | "md" | "lg"
   color:
@@ -33,6 +34,7 @@ const SelectUI: ForwardRefRenderFunction<
     size,
     isInvalid,
     errorMessage,
+    startContent,
     ...props
   },
   ref
@@ -45,6 +47,7 @@ const SelectUI: ForwardRefRenderFunction<
         color={color}
         variant={variant}
         size={size}
+        startContent={startContent}
         ref={ref as React.RefObject<HTMLSelectElement>}
         isInvalid={isInvalid}
         errorMessage={errorMessage}

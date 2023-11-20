@@ -1,4 +1,4 @@
-import { EquipmentCard } from "@/app/component/client/EquipmentCard"
+import EquipmentPage from "@/app/component/client/EquipmentPage"
 import prismaClient from "@/app/utils/prismaClient"
 import React from "react"
 
@@ -33,12 +33,6 @@ const page: React.FC<pageProps> = async ({}) => {
     },
   })
 
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {equipments.map((eq) => (
-        <EquipmentCard key={eq.id} equipment={eq} />
-      ))}
-    </div>
-  )
+  return <EquipmentPage equipments={equipments} />
 }
 export default page

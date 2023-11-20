@@ -54,7 +54,12 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
         />
         <CardFooter className="absolute bg-default/30 bottom-0 border-t-1 border-white/10 z-10 justify-between">
           <div>
-            <p className="text-white text-tiny">Date d&apos;aquisition</p>
+            <p className="text-white text-tiny">
+              {equipment.user.lastname.toUpperCase() +
+                " " +
+                equipment.user.firstname.toString().slice(0, 1).toUpperCase() +
+                equipment.user.firstname.toString().slice(1)}
+            </p>
             <p className="text-white/60 text-tiny">
               {equipment.date_aquisition.toISOString().slice(0, 10)}
             </p>
@@ -103,6 +108,12 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
                     <li className="flex justify-between border-b border-white/20 p-3">
                       <span className="text-white/90">Date de sortie</span>{" "}
                       {equipment.date_sortie.toISOString().slice(0, 10)}
+                    </li>
+                    <li className="flex justify-between border-b border-white/20 p-3">
+                      <span className="text-white/90">
+                        Date d&apos;aquisition
+                      </span>{" "}
+                      {equipment.date_aquisition.toISOString().slice(0, 10)}
                     </li>
                     <li className="flex justify-between p-3">
                       <span className="text-white/90">
