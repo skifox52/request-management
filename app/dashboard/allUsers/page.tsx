@@ -391,7 +391,7 @@ export default function App() {
     }
   }
   return (
-    <>
+    <React.Fragment>
       <Modal
         backdrop={"blur"}
         isOpen={opentModal}
@@ -402,7 +402,7 @@ export default function App() {
       >
         <ModalContent>
           {(onClose) => (
-            <>
+            <React.Fragment>
               <ModalHeader className="flex flex-col gap-1 text-center">
                 Changer le mot de passe
               </ModalHeader>
@@ -457,7 +457,7 @@ export default function App() {
                   Close
                 </Button>
               </ModalFooter>
-            </>
+            </React.Fragment>
           )}
         </ModalContent>
       </Modal>
@@ -468,7 +468,7 @@ export default function App() {
       >
         <ModalContent>
           {(onClose) => (
-            <>
+            <React.Fragment>
               <ModalHeader className="flex text-md flex-col gap-1">
                 Voulez vous vraiment supprimer cet utilisateur?
               </ModalHeader>
@@ -488,7 +488,7 @@ export default function App() {
                   Non
                 </Button>
               </ModalFooter>
-            </>
+            </React.Fragment>
           )}
         </ModalContent>
       </Modal>
@@ -534,6 +534,6 @@ export default function App() {
           )}
         </TableBody>
       </Table>
-    </>
+    </React.Fragment>
   )
 }

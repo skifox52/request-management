@@ -3,7 +3,7 @@ import { TloginSchema, loginSchema } from "@/app/zod/loginSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Logo } from "../ui/Logo"
@@ -16,7 +16,6 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
   const router = useRouter()
-  const [focused, setFocused] = useState<boolean>(false)
 
   const [unauthorizedError, setUnauthoriezdError] = useState<string | null>(
     null
@@ -61,16 +60,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
     }
   }
 
-  useEffect(() => {
-    setUnauthoriezdError("")
-    if (!!username || !!password) setFocused(true)
-  }, [username, password])
   return (
     <form
       onSubmit={handleSubmit(login)}
-      className={`p-8 pt-3 transition-all duration-250 flex flex-col gap-4 border border-opacity-10 rounded-3xl mx-auto border-foreground max-w-md ${
-        !focused && " shadow-lg shadow-content1 -translate-y-1"
-      }`}
+      className={`p-8 pt-3 transition-all duration-250 flex flex-col gap-4 border border-opacity-10 rounded-3xl mx-auto border-foreground max-w-md`}
     >
       <Logo color="white" height={"16"} />
       <h1 className="text-3xl text-center text-secondary">Connexion</h1>

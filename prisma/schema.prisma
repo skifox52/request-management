@@ -154,8 +154,9 @@ model DemandeIntervention {
   id String @id @default(uuid())
   id_user String
   motif_demande String
-  date_deamdne String
+  date_demande DateTime @default(now())
+  id_equipement String
   personne User @relation(fields: [id_user], references: [id])
-  equipement Equipement[]
+  equipement Equipement @relation(fields: [id_equipement], references: [id])
   intervention Intervention?
 }

@@ -78,7 +78,7 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
     }
   }
   return (
-    <>
+    <React.Fragment>
       <form
         onSubmit={handleSubmit(addEquipment)}
         className="flex mx-auto bg-content1 rounded-lg border border-default p-8 shadow-lg shadow-primary flex-col max-w-xl text-black gap-6"
@@ -215,7 +215,7 @@ const AddEquipmentForm: React.FC<AddEquipmentFormProps> = ({}) => {
           />
         </div>
       </form>
-    </>
+    </React.Fragment>
   )
 }
 export default AddEquipmentForm

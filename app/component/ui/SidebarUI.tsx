@@ -21,7 +21,7 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
   }, [])
 
   return (
-    <>
+    <React.Fragment>
       <nav
         id="sidenav-3"
         className="fixed left-0 top-16 z-[10350] h-screen w-60 -translate-x-full overflow-hidden bg-primary shadow-[0_4px_12px_0_rgba(0,0,0,0.07),_0_2px_4px_rgba(0,0,0,0.05)] data-[te-sidenav-hidden='false']:translate-x-0"
@@ -170,7 +170,7 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
       >
         <PanelRight />
       </button>
-    </>
+    </React.Fragment>
   )
 }
 export default SidebarUI

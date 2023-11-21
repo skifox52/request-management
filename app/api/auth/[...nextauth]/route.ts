@@ -46,7 +46,7 @@ export const authOptions: AuthOptions = {
       const usr: User = user as User
       if (account) {
         token.accessToken = account.access_token
-        token.id = usr.id
+        token.id = user.id
         token.role = usr.role
       }
       return token

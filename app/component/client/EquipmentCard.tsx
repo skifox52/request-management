@@ -36,7 +36,7 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Card isFooterBlurred className="group">
         <CardHeader className="absolute bg-black/40 z-10 top-0 flex-col items-start">
           <p className="text-tiny text-white/70 uppercase font-bold">
@@ -75,11 +75,11 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
           </Button>
         </CardFooter>
       </Card>
-      <>
+      <React.Fragment>
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
             {(onClose) => (
-              <>
+              <React.Fragment>
                 <ModalHeader className="flex gap-6">
                   <Image src={thumbnailUrl} alt="thumbnail" />
                   <div>
@@ -128,11 +128,11 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
                     Fermer
                   </Button>
                 </ModalFooter>
-              </>
+              </React.Fragment>
             )}
           </ModalContent>
         </Modal>
-      </>
-    </>
+      </React.Fragment>
+    </React.Fragment>
   )
 }

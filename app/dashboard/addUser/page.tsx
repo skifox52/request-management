@@ -49,7 +49,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <form
         onSubmit={handleSubmit(addUser)}
         className="grid lg:grid-cols-2 xl:grid-cols-3 text-black gap-6"
@@ -213,7 +213,7 @@ const AddUser: React.FC<pageProps> = ({}) => {
           />
         </div>
       </form>
-    </>
+    </React.Fragment>
   )
 }
 export default AddUser

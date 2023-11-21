@@ -3,6 +3,6 @@ import React from "react"
 interface pageProps {}
 
 const Page: React.FC<pageProps> = ({}) => {
-  return <>homepage</>
+  return <React.Fragment>homepage</React.Fragment>
 }
 export default Page
