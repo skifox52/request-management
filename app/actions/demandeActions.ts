@@ -18,7 +18,6 @@ export const demandeInterventionAction = async (data: TDemandeIntervention) => {
       },
     })
   } catch (error: any) {
-    console.log(error)
     throw new Error("Une erreur est survenue, veuillez réessayer")
   }
 }

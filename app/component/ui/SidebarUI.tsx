@@ -1,5 +1,6 @@
 "use client"
 import {
+  FileWarning,
   Gauge,
   HardDrive,
   ListOrdered,
@@ -148,6 +149,51 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
               <li className="relative">
                 <Link
                   href={"/dashboard/allEquipments"}
+                  className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+                  data-te-sidenav-link-ref
+                >
+                  <span className="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
+                    <ListOrdered />
+                  </span>
+                  Afficher
+                </Link>
+              </li>
+            </ul>
+          </li>
+          <li className="relative">
+            <a
+              className="flex h-12 cursor-pointer items-center truncate rounded-[5px] px-6 py-4 text-[0.875rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
+              data-te-sidenav-link-ref
+            >
+              <span className="mr-4 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:text-gray-400 dark:[&>svg]:text-gray-300">
+                <FileWarning />
+              </span>
+              <span>Réclamations</span>
+              <span
+                className="absolute right-0 ml-auto mr-[0.8rem] transition-transform duration-300 ease-linear motion-reduce:transition-none [&>svg]:text-gray-600 dark:[&>svg]:text-gray-300"
+                data-te-sidenav-rotate-icon-ref
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </a>
+            <ul
+              className="!visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block "
+              data-te-sidenav-collapse-ref
+            >
+              <li className="relative">
+                <Link
+                  href={"/dashboard/allReclamations"}
                   className="flex h-6 cursor-pointer items-center truncate rounded-[5px] py-4 pl-[3.4rem] pr-6 text-[0.78rem] text-gray-300 outline-none transition duration-300 ease-linear hover:bg-white/10 hover:outline-none focus:bg-white/10 focus:outline-none active:bg-white/10 active:outline-none data-[te-sidenav-state-focus]:outline-none motion-reduce:transition-none"
                   data-te-sidenav-link-ref
                 >

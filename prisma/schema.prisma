@@ -28,7 +28,6 @@ model User {
   departement Departement @relation(fields: [id_dep],references: [id])
   group Groupe @relation(fields: [id_group], references: [id])
   equipement Equipement[]
-  reparation Reparation[]
   intervention Intervention[]
   demandeIntervention DemandeIntervention[]
 }
@@ -76,62 +75,6 @@ model TypeEquipement {
   equipement Equipement[]
 }
 
-model Fournisseur {
-  id String @id @default(uuid())
-  nom String
-  adresse String
-  adresse_web String
-  num_tel Int
-  decharge Decharge?
-}
-
-model Decharge {
-  id String @id @default(uuid())
-  id_fournisseur String @unique
-  date_etablir DateTime
-  date_de_sortie DateTime
-  date_entree DateTime
-  fournisseur Fournisseur @relation(fields: [id_fournisseur], references: [id])
-  reparation Reparation?
-}
-
-model Piece {
-  id String @id @default(uuid())
-  modele String
-  marque String
-  demandePiece DemandePiece[]
-}
-
-model DemandePiece {
-  id String @id @default(uuid())
-  id_magasin String @unique
-  modele String
-  marque String
-  etat_piece String
-  magasin Magasin @relation(fields: [id_magasin], references: [id])
-  piece Piece[]
-}
-
-model Magasin {
-  id String @id @default(uuid())
-  tel_magasin Int
-  email String
-  demandePiece DemandePiece?
-}
-
-model Reparation {
-  id String @id @default(uuid())
-  id_user String 
-  id_intervention String @unique
-  id_decharge String @unique
-  probleme String
-  solution String
-  date_reparation String
-  user User @relation(fields: [id_user], references: [id])
-  intervention Intervention @relation(fields: [id_intervention], references: [id])
-  decharge Decharge @relation(fields: [id_decharge], references: [id])
-}
-
 model Intervention {
   id String @id @default(uuid())
   id_equipement String 
@@ -147,7 +90,6 @@ model Intervention {
   equipement Equipement @relation(fields: [id_equipement], references: [id])
   user User @relation(fields: [id_user],references: [id])
   demandeIntervention DemandeIntervention @relation(fields: [id_demande_intervention], references: [id])
-  reparation Reparation?
 }
 
 model DemandeIntervention {
@@ -157,6 +99,6 @@ model DemandeIntervention {
   date_demande DateTime @default(now())
   id_equipement String
   personne User @relation(fields: [id_user], references: [id])
-  equipement Equipement @relation(fields: [id_equipement], references: [id])
+  equipement Equipement[]
   intervention Intervention?
 }

@@ -1,9 +1,7 @@
 "use server"
 import React from "react"
 import { Card, CardBody } from "@nextui-org/react"
-import { AuthOptions } from "next-auth"
 import { getServerSession } from "next-auth"
-import { redirect } from "next/navigation"
 import prismaClient from "@/app/utils/prismaClient"
 import { TUser } from "@/app/api/users/all/route"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
@@ -23,30 +21,37 @@ const Page: React.FC<pageProps> = async ({ searchParams }) => {
       },
     })
   return (
-    <Card shadow="md">
+    <Card
+      shadow="md"
+      className="max-w-screen-sm bg-content1 mx-auto shadow-lg shadow-content2 border border-default/30"
+    >
       <CardBody>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">nom</h2>
+        <div className="flex justify-between border-b border-default p-2">
+          <h2 className="text-gray-300 font-semibold text-medium tracking-tight">
+            Nom
+          </h2>
           <p>{data?.lastname}</p>
         </div>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">prénom</h2>
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">Prénom</h2>
           <p>{data?.firstname}</p>
         </div>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">
-            nom d&apos;utilisateur
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">
+            Nom d&apos;utilisateur
           </h2>
           <p>{data?.username}</p>
         </div>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">adresse mail</h2>
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">
+            Adresse mail
+          </h2>
           <p>{data?.email}</p>
         </div>
 
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">
-            numéro de téléphone
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">
+            Numéro de téléphone
           </h2>
           <p>
             0
@@ -57,21 +62,25 @@ const Page: React.FC<pageProps> = async ({ searchParams }) => {
               data?.phone.toString().substring(6, data.phone.toString().length)}
           </p>
         </div>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">fonction</h2>
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">
+            Fonction
+          </h2>
           <p>{data?.function}</p>
         </div>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">département</h2>
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">
+            Département
+          </h2>
           <p>{data?.departement.dep_name}</p>
         </div>
-        <div className="flex justify-between border-b border-default py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">groupe</h2>
+        <div className="flex justify-between border-b border-default p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">Groupe</h2>
           <p>{data?.group.libelle}</p>
         </div>
-        <div className="flex justify-between py-4 px-2">
-          <h2 className="uppercase text-white font-semibold">
-            numéro de bureau
+        <div className="flex justify-between p-3">
+          <h2 className="text-gray-300 tracking-tight font-semibold">
+            Numéro de bureau
           </h2>
           <p>{data?.office_num}</p>
         </div>

@@ -9,7 +9,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
     <main
       className={
         pathname !== "/dashboard/addEquipment"
-          ? "bg-content1 border border-white/10 p-6 rounded-xl"
+          ? "bg-content2 border border-white/10 p-6 rounded-xl"
           : "p-6"
       }
     >

@@ -42,16 +42,16 @@ export default function NavbarUI() {
         >
           <NavbarItem isActive={path === "/home"}>
             <Link color="foreground" href="/home">
-              Accueil
+              Equipement
             </Link>
           </NavbarItem>
-          <NavbarItem isActive={path === "/home/equipement"}>
+          <NavbarItem isActive={path === "/home/demandeIntervention"}>
             <Link
-              href="/home/equipement"
+              href="/home/demandeIntervention"
               color="foreground"
               aria-current="page"
             >
-              Equipement
+              Intervention
             </Link>
           </NavbarItem>
           <NavbarItem isActive={path === "/home/profil"}>

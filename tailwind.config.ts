@@ -27,7 +27,7 @@ const config: Config = {
             primary: "#101419",
             secondary: "#FF9F21",
             content1: "#181E25",
-            content2: "black",
+            content2: "#0c1012",
             content3: "#101419",
             content4: "#202832",
             default: {
