@@ -12,5 +12,4 @@ export type TDemandeInterventionFormSchema = z.infer<
 >
 export type TDemandeIntervention = TDemandeInterventionFormSchema & {
   id_user: string
-  id_equipement: String
 }

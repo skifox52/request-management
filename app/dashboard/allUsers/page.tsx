@@ -454,7 +454,7 @@ export default function App() {
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                  Fermer
                 </Button>
               </ModalFooter>
             </React.Fragment>

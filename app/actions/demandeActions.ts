@@ -5,7 +5,10 @@ import {
   demandeInterventionFormSchema,
 } from "../zod/demandeInterventionSchema"
 
-export const demandeInterventionAction = async (data: TDemandeIntervention) => {
+export const demandeInterventionAction = async (
+  data: TDemandeIntervention,
+  equipmentIds: string[]
+) => {
   try {
     const parsedData = demandeInterventionFormSchema.safeParse(data)
     if (!parsedData.success)
@@ -13,8 +16,14 @@ export const demandeInterventionAction = async (data: TDemandeIntervention) => {
     await prismaClient.demandeIntervention.create({
       data: {
         motif_demande: data.motif_demande,
-        id_equipement: data.id_equipement.toString(),
         id_user: data.id_user,
+        equipement: {
+          connect: [
+            ...equipmentIds.map((id) => ({
+              id,
+            })),
+          ],
+        },
       },
     })
   } catch (error: any) {

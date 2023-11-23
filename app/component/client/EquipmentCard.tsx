@@ -5,7 +5,6 @@ import {
   Card,
   CardFooter,
   CardHeader,
-  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,6 +12,8 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react"
+// import { Image } from "@nextui-org/image"
+import Image from "next/image"
 import React from "react"
 
 interface EquipmentCardProps {
@@ -47,10 +48,12 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
           </h4>
         </CardHeader>
         <Image
-          removeWrapper
           alt="Card example background"
-          className="z-0 w-full h-full scale-125 -translate-y-6 object-cover group-hover:scale-[135%]"
+          className="z-0 w-full h-full scale-125 -translate-y-6 object-cover group-hover:scale-[135%] transition-all duration-200"
           src={url}
+          width={400}
+          height={400}
+          priority
         />
         <CardFooter className="absolute bg-default/30 bottom-0 border-t-1 border-white/10 z-10 justify-between">
           <div>
@@ -81,7 +84,14 @@ export const EquipmentCard: React.FC<EquipmentCardProps> = ({ equipment }) => {
             {(onClose) => (
               <React.Fragment>
                 <ModalHeader className="flex gap-6">
-                  <Image src={thumbnailUrl} alt="thumbnail" />
+                  <Image
+                    src={thumbnailUrl}
+                    alt="thumbnail"
+                    width={150}
+                    height={150}
+                    className="rounded-xl object-cover"
+                    priority
+                  />
                   <div>
                     <h1 className="uppercase text-xl text-white ">
                       {equipment.typeEquipement.libelle}

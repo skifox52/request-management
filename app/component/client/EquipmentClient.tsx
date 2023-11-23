@@ -17,12 +17,12 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Image,
   Textarea,
   Card,
   CardBody,
 } from "@nextui-org/react"
-import { MinusCircle, PenSquare, PlusCircle, PlusSquare } from "lucide-react"
+import { MinusCircle, PlusCircle } from "lucide-react"
+import Image from "next/image"
 import { TUserEquipment } from "@/app/home/page"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -32,7 +32,6 @@ import {
 } from "@/app/zod/demandeInterventionSchema"
 import toast from "react-hot-toast"
 import { demandeInterventionAction } from "@/app/actions/demandeActions"
-import ButtonUI from "../ui/ButtonUI"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -114,6 +113,7 @@ export default function EquipmentClient({
     formState: { errors },
     reset,
     handleSubmit,
+    setError,
   } = useForm<TDemandeInterventionFormSchema>({
     resolver: zodResolver(demandeInterventionFormSchema),
   })
@@ -141,12 +141,17 @@ export default function EquipmentClient({
 
   const onSubmit = async (data: TDemandeInterventionFormSchema) => {
     try {
-      // await demandeInterventionAction({
-      //   id_equipement: String(currentItem?.id),
-      //   id_user: userId,
-      //   motif_demande: data.motif_demande,
-      // })
+      if (equipmentInIntervention.length === 0)
+        return toast.error("Veuillez ajouter un ou plusieurs équipement(s)")
+      await demandeInterventionAction(
+        {
+          id_user: userId,
+          motif_demande: data.motif_demande,
+        },
+        equipmentInIntervention.map((e) => e.id)
+      )
       toast.success("Réclamation envoyer avec succès")
+      setEquipmentInIntervention([])
       reset()
       onOpenChange()
     } catch (error: any) {
@@ -197,7 +202,7 @@ export default function EquipmentClient({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-4">
-                <h1 className="text-3xl tracking-tight font-mediumm text-white text-center">
+                <h1 className="text-3xl tracking-tight text-white text-center">
                   Réclamation
                 </h1>
                 <div className="grid grid-cols-2 px-3 gap-3 py-4 border-y border-white/20">
@@ -211,6 +216,10 @@ export default function EquipmentClient({
                               : JSON.parse(eq.image).thumbnailUrl
                           }
                           alt="Thumbnail image"
+                          height={200}
+                          width={200}
+                          priority
+                          className="rounded-xl"
                         />
                         <div>
                           <h1 className="text-sm text-white">{eq.libelle}</h1>
@@ -220,6 +229,13 @@ export default function EquipmentClient({
                           size="sm"
                           className="text-sm"
                           variant="ghost"
+                          color={
+                            equipmentInIntervention
+                              .map((e) => e.id)
+                              .includes(eq.id)
+                              ? "danger"
+                              : "default"
+                          }
                           onClick={() =>
                             equipmentInIntervention
                               .map((e) => e.id)
@@ -248,9 +264,26 @@ export default function EquipmentClient({
                     </Card>
                   ))}
                   {equipmentInIntervention.length > 0 && (
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-2 col-span-2">
                       {equipmentInIntervention.map((eq) => (
-                        <div key={eq.id}>Hello</div>
+                        <div
+                          key={eq.id}
+                          className="flex gap-4 w-full items-center py-2"
+                        >
+                          <Image
+                            src={
+                              eq.image === "/placeholder-wire-image-dark.png"
+                                ? "/placeholder-wire-image-dark.png"
+                                : JSON.parse(eq.image).thumbnailUrl
+                            }
+                            alt="Thumbnail image"
+                            className="object-cover rounded-md"
+                            height="35"
+                            width="45"
+                            priority
+                          />
+                          <h1 className="tracking-tight">{eq.libelle}</h1>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -275,6 +308,7 @@ export default function EquipmentClient({
                     type="button"
                     onPress={() => {
                       onClose()
+                      setEquipmentInIntervention([])
                       reset()
                     }}
                   >
