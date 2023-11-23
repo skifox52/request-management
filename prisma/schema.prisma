@@ -97,7 +97,6 @@ model DemandeIntervention {
   id_user String
   motif_demande String
   date_demande DateTime @default(now())
-  id_equipement String
   personne User @relation(fields: [id_user], references: [id])
   equipement Equipement[]
   intervention Intervention?

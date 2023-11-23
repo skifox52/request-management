@@ -22,7 +22,7 @@ import {
   Card,
   CardBody,
 } from "@nextui-org/react"
-import { PenSquare } from "lucide-react"
+import { MinusCircle, PenSquare, PlusCircle, PlusSquare } from "lucide-react"
 import { TUserEquipment } from "@/app/home/page"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -117,6 +117,28 @@ export default function EquipmentClient({
   } = useForm<TDemandeInterventionFormSchema>({
     resolver: zodResolver(demandeInterventionFormSchema),
   })
+
+  const [equipmentInIntervention, setEquipmentInIntervention] = React.useState<
+    {
+      id: string
+      image: string
+      libelle: string
+    }[]
+  >([])
+
+  //Add/Remove equipement in list onclick
+  const addEquipmentOnClick = (equipment: {
+    id: string
+    image: string
+    libelle: string
+  }) => {
+    setEquipmentInIntervention((prev) => [...prev, equipment])
+  }
+
+  const removeEquipmentOnClick = (id: string) => {
+    setEquipmentInIntervention((prev) => prev.filter((e) => e.id !== id))
+  }
+
   const onSubmit = async (data: TDemandeInterventionFormSchema) => {
     try {
       // await demandeInterventionAction({
@@ -180,15 +202,58 @@ export default function EquipmentClient({
                 </h1>
                 <div className="grid grid-cols-2 px-3 gap-3 py-4 border-y border-white/20">
                   {equipments.map((eq) => (
-                    <Card key={eq.id} isPressable className="bg-content2">
-                      <CardBody>
-                        <p>
-                          Make beautiful websites regardless of your design
-                          experience.
-                        </p>
+                    <Card key={eq.id} className="bg-content2">
+                      <CardBody className="flex gap-2">
+                        <Image
+                          src={
+                            eq.image === "/placeholder-wire-image-dark.png"
+                              ? "/placeholder-wire-image-dark.png"
+                              : JSON.parse(eq.image).thumbnailUrl
+                          }
+                          alt="Thumbnail image"
+                        />
+                        <div>
+                          <h1 className="text-sm text-white">{eq.libelle}</h1>
+                          <p className="text-xs">{eq.caracteristique}</p>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="text-sm"
+                          variant="ghost"
+                          onClick={() =>
+                            equipmentInIntervention
+                              .map((e) => e.id)
+                              .includes(eq.id)
+                              ? removeEquipmentOnClick(eq.id)
+                              : addEquipmentOnClick({
+                                  id: eq.id,
+                                  image: eq.image,
+                                  libelle: eq.libelle,
+                                })
+                          }
+                        >
+                          {equipmentInIntervention
+                            .map((e) => e.id)
+                            .includes(eq.id) ? (
+                            <React.Fragment>
+                              Retier <MinusCircle size="16" />
+                            </React.Fragment>
+                          ) : (
+                            <React.Fragment>
+                              Ajouter <PlusCircle size="16" />
+                            </React.Fragment>
+                          )}
+                        </Button>
                       </CardBody>
                     </Card>
                   ))}
+                  {equipmentInIntervention.length > 0 && (
+                    <div className="flex flex-col">
+                      {equipmentInIntervention.map((eq) => (
+                        <div key={eq.id}>Hello</div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </ModalHeader>
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -196,7 +261,7 @@ export default function EquipmentClient({
                   <Textarea
                     {...register("motif_demande")}
                     label="Motif"
-                    placeholder="Enter your description"
+                    placeholder="Motif de réclamation..."
                     variant="bordered"
                     color="default"
                     errorMessage={errors.motif_demande?.message}
