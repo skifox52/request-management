@@ -28,7 +28,6 @@ model User {
   departement Departement @relation(fields: [id_dep],references: [id])
   group Groupe @relation(fields: [id_group], references: [id])
   equipement Equipement[]
-  intervention Intervention[]
   demandeIntervention DemandeIntervention[]
 }
 
@@ -66,7 +65,6 @@ model Equipement {
   typeEquipement TypeEquipement @relation(fields: [id_equipement], references: [id])
   user User @relation(fields: [id_user],references: [id])
   demandeIntervention DemandeIntervention[]
-  intervention Intervention[]
 }
 
 model TypeEquipement {
@@ -75,29 +73,19 @@ model TypeEquipement {
   equipement Equipement[]
 }
 
-model Intervention {
-  id String @id @default(uuid())
-  id_equipement String 
-  id_demande_intervention String @unique
-  id_user String 
-  id_demande String 
-  urgence String
-  description String
-  type_panne String
-  cat_panne String
-  etat String
-  date_fin_intervention DateTime? 
-  equipement Equipement @relation(fields: [id_equipement], references: [id])
-  user User @relation(fields: [id_user],references: [id])
-  demandeIntervention DemandeIntervention @relation(fields: [id_demande_intervention], references: [id])
+enum InterventionStatus {
+  EN_ATTENTE
+  EN_COURS
+  REJETER
+  TERMINER
 }
 
 model DemandeIntervention {
   id String @id @default(uuid())
   id_user String
   motif_demande String
+  status InterventionStatus @default(EN_ATTENTE)
   date_demande DateTime @default(now())
   personne User @relation(fields: [id_user], references: [id])
   equipement Equipement[]
-  intervention Intervention?
 }

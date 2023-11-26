@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `DemandeIntervention` MODIFY `status` ENUM('EN_ATTENTE', 'EN_COURS', 'REJETER', 'TERMINER') NOT NULL DEFAULT 'EN_ATTENTE';

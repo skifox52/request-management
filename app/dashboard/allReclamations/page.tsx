@@ -8,8 +8,8 @@ export interface TClaims {
   id: string
   id_user: string
   motif_demande: string
+  status: "EN_ATTENTE" | "EN_COURS" | "REJETER" | "TERMINER"
   date_demande: Date
-  id_equipement: string
   personne: {
     id: string
     firstname: string
@@ -21,8 +21,8 @@ export interface TClaims {
     id: string
     libelle: string
     date_fin_garantie: Date
-    image: string
-  }
+    numero_de_serie: string
+  }[]
 }
 
 const page: React.FC<pageProps> = async ({}) => {
@@ -31,9 +31,9 @@ const page: React.FC<pageProps> = async ({}) => {
       equipement: {
         select: {
           libelle: true,
-          image: true,
           id: true,
           date_fin_garantie: true,
+          numero_de_serie: true,
         },
       },
       personne: {
@@ -46,6 +46,7 @@ const page: React.FC<pageProps> = async ({}) => {
         },
       },
     },
+    orderBy: [{ date_demande: "desc" }],
   })
   return <ReclamationDashboard claims={claims} />
 }

@@ -31,7 +31,13 @@ const page: React.FC<pageProps> = async ({}) => {
   })
   return (
     <React.Fragment>
-      <EquipmentClient equipments={equipments} userId={session?.user.id} />
+      {equipments.length > 0 ? (
+        <EquipmentClient equipments={equipments} userId={session?.user.id} />
+      ) : (
+        <h1 className="bg-content-1 w-full font-normal tracking-tight text-xl mt-8 border border-default p-4 flex items-center justify-center rounded-xl">
+          Aucun équipement attribuer...
+        </h1>
+      )}
     </React.Fragment>
   )
 }

@@ -4,7 +4,7 @@ import { EquipmentCard } from "./EquipmentCard"
 import { TEquipment } from "@/app/dashboard/allEquipments/page"
 import InputUI from "../ui/InputUI"
 import { Search } from "lucide-react"
-import { useDdebounce } from "@/app/utils/useDebounce"
+import { useDebounce } from "@/app/utils/useDebounce"
 
 interface EquipmentPageProps {
   equipments: TEquipment[]
@@ -12,10 +12,13 @@ interface EquipmentPageProps {
 
 const EquipmentPage: React.FC<EquipmentPageProps> = ({ equipments }) => {
   const [searchValue, setSearchValue] = React.useState<string>("")
+
   const [filteredEquipment, setFilteredEquipment] = React.useState<
     TEquipment[] | []
   >(equipments)
-  const debounceValue = useDdebounce(searchValue, 400)
+
+  const debounceValue = useDebounce(searchValue, 400)
+
   React.useEffect(() => {
     setFilteredEquipment((prev) => {
       if (debounceValue === "") return equipments
