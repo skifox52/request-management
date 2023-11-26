@@ -121,7 +121,7 @@ const ReclamationDashboard: React.FC<ReclamationDashboardProps> = ({
                         c.personne.firstname}
                     </h1>
                     <span
-                      className={`font-semibold uppercase tracking-tight text-center ${
+                      className={`font-semibold text-sm uppercase tracking-tight text-center ${
                         c.status === "EN_ATTENTE"
                           ? "text-secondary"
                           : c.status === "EN_COURS"

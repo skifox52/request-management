@@ -184,7 +184,10 @@ export default function EquipmentClient({
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody items={equipments}>
+          <TableBody
+            emptyContent="Aucun équipement attribuer"
+            items={equipments}
+          >
             {(item) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
