@@ -63,7 +63,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
   return (
     <form
       onSubmit={handleSubmit(login)}
-      className={`p-8 pt-3 transition-all duration-250 flex flex-col gap-4 border border-opacity-10 rounded-3xl mx-auto border-foreground max-w-md`}
+      className={`p-8 pt-3 flex flex-col gap-4 border rounded-3xl mx-auto border-default/50 shadow-2xl shadow-black/70 max-w-md`}
     >
       <Logo color="white" height={"16"} />
       <h1 className="text-3xl text-center text-secondary">Connexion</h1>

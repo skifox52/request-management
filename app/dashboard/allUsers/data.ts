@@ -1,4 +1,3 @@
-import React from "react"
 const columns = [
   { name: "ID", uid: "id", sortable: true },
   { name: "NOM", uid: "name", sortable: true },
@@ -13,8 +12,8 @@ const columns = [
 ]
 
 const statusOptions = [
-  { name: "Active", uid: "active" },
-  { name: "Paused", uid: "paused" },
+  { name: "Actif", uid: "active" },
+  { name: "Désactiver", uid: "paused" },
 ]
 
 export { columns, statusOptions }

@@ -208,7 +208,7 @@ const SidebarUI: React.FC<SidebarProps> = ({}) => {
         </ul>
       </nav>
       <button
-        className="absolute h-fit bottom-8 md:top-8 -translate-y-1/2 z-[9999999] rounded px-6 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+        className="absolute h-fit bottom-8 left-1/2 lg:left-0 md:top-8 -translate-y-1/2 z-[9999999] rounded px-6 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
         data-te-sidenav-toggle-ref
         data-te-target="#sidenav-3"
         aria-controls="#sidenav-3"
