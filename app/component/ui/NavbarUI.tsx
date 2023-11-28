@@ -69,7 +69,7 @@ export default function NavbarUI() {
               color="danger"
               variant="ghost"
               onClick={async () => {
-                signOut({ redirect: false })
+                await signOut({ redirect: false })
                 router.replace("/")
               }}
             />
