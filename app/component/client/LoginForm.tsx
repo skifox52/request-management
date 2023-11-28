@@ -3,7 +3,6 @@ import { TloginSchema, loginSchema } from "@/app/zod/loginSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { Logo } from "../ui/Logo"
@@ -16,10 +15,6 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
   const router = useRouter()
-
-  const [unauthorizedError, setUnauthoriezdError] = useState<string | null>(
-    null
-  )
 
   const {
     register,
@@ -40,10 +35,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
         redirect: false,
       })
       if (res?.status === 401 && !res.ok) {
-        setTimeout(() => {
-          setUnauthoriezdError("")
-        }, 2500)
-        return setUnauthoriezdError("Vérifier vos identifiants")
+        return toast.error("Vérifier vos identifiants")
       }
       const [user] = users.filter((u) => u.username === data.username)
       if (!user.isActive)
@@ -67,13 +59,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
     >
       <Logo color="white" height={"16"} />
       <h1 className="text-3xl text-center text-secondary">Connexion</h1>
-      {(Object.keys(errors).length > 0 || !!unauthorizedError) && (
-        <div className="bg-red-500/30 border flex flex-col gap-1 font-semibold text-white/80 border-red-600 rounded-lg p-4 text-sm text-justify">
-          <p>{errors.username?.message}</p>
-          <p>{errors.password?.message}</p>
-          <p>{unauthorizedError && unauthorizedError}</p>
-        </div>
-      )}
+
       <InputUI
         {...register("username")}
         variant="underlined"
@@ -82,6 +68,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
         size="lg"
         color="secondary"
         className="text-default-50"
+        isDisabled={isSubmitting}
       />
       <InputUI
         {...register("password")}
@@ -91,6 +78,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
         size="lg"
         color="secondary"
         className="text-default-50"
+        isDisabled={isSubmitting}
       />
 
       <ButtonUI

@@ -43,8 +43,8 @@ export const authOptions: AuthOptions = {
       return session
     },
     jwt: ({ user, account, token }) => {
-      const usr: User = user as User
-      if (account) {
+      if (account && user) {
+        const usr: User = user as User
         token.accessToken = account.access_token
         token.id = user.id
         token.role = usr.role

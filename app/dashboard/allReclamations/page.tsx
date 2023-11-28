@@ -2,6 +2,8 @@ import ReclamationDashboard from "@/app/component/client/ReclamationDashboard"
 import prismaClient from "@/app/utils/prismaClient"
 import React from "react"
 
+export const dynamic = "force-dynamic"
+
 interface pageProps {}
 
 export interface TClaims {

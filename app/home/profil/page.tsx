@@ -6,11 +6,7 @@ import prismaClient from "@/app/utils/prismaClient"
 import { TUser } from "@/app/api/users/all/route"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
-interface pageProps {
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-const Page: React.FC<pageProps> = async ({ searchParams }) => {
+const Page = async () => {
   const session = await getServerSession(authOptions)
   const data: (TUser & { office_num: number }) | null =
     await prismaClient.user.findFirst({

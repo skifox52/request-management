@@ -2,6 +2,8 @@ import EquipmentPage from "@/app/component/client/EquipmentPage"
 import prismaClient from "@/app/utils/prismaClient"
 import React from "react"
 
+export const dynamic = "force-dynamic"
+
 interface pageProps {}
 
 export type TEquipment = {
