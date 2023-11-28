@@ -68,9 +68,10 @@ export default function NavbarUI() {
               value="Se déconnecter"
               color="danger"
               variant="ghost"
-              onClick={async () =>
-                await signOut({ redirect: false }).then(() => router.push("/"))
-              }
+              onClick={async () => {
+                signOut({ redirect: false })
+                router.replace("/")
+              }}
             />
           </NavbarItem>
         </NavbarContent>
