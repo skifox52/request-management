@@ -1,5 +1,5 @@
 "use client"
-import { registerUserAction } from "@/app/actions/authActions"
+import { registerUserAction } from "@/app/_actions/authActions"
 import ButtonUI from "@/app/component/ui/ButtonUI"
 import InputUI from "@/app/component/ui/InputUI"
 import SelectUI from "@/app/component/ui/SelectUI"

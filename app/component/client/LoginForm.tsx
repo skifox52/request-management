@@ -10,15 +10,15 @@ import InputUI from "../ui/InputUI"
 import ButtonUI from "../ui/ButtonUI"
 
 interface LoginFormProps {
-  data: { username: string; isActive: boolean; role: string }[]
+  dataa: { username: string; isActive: boolean; role: string }[]
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ dataa: users }) => {
   const router = useRouter()
 
   const {
     register,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting, isValid, isLoading },
     handleSubmit,
     watch,
   } = useForm<TloginSchema>({
@@ -68,7 +68,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
         size="lg"
         color="secondary"
         className="text-default-50"
-        isDisabled={isSubmitting}
+        isDisabled={isSubmitting || isLoading}
       />
       <InputUI
         {...register("password")}
@@ -78,7 +78,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
         size="lg"
         color="secondary"
         className="text-default-50"
-        isDisabled={isSubmitting}
+        isDisabled={isSubmitting || isLoading}
       />
 
       <ButtonUI
@@ -86,8 +86,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ data: users }) => {
         type="submit"
         value="Connexion"
         className="font-medium text-md mt-4 text-white"
-        isLoading={isSubmitting}
-        isDisabled={isSubmitting || !!Object.keys(errors).length || !isValid}
+        isLoading={isSubmitting || isLoading}
+        isDisabled={
+          isSubmitting || isLoading || !!Object.keys(errors).length || !isValid
+        }
       />
     </form>
   )

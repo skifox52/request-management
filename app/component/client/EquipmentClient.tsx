@@ -31,7 +31,7 @@ import {
   demandeInterventionFormSchema,
 } from "@/app/zod/demandeInterventionSchema"
 import toast from "react-hot-toast"
-import { demandeInterventionAction } from "@/app/actions/demandeActions"
+import { demandeInterventionAction } from "@/app/_actions/demandeActions"
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",

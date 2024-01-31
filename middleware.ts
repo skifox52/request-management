@@ -7,7 +7,6 @@ export default async function middleware(
   event: NextFetchEvent
 ) {
   const token = await getToken({ req })
-  console.log(token)
   const isAuthenticated = !!token
   if (req.nextUrl.pathname === "/" && isAuthenticated) {
     if (token?.role === "admin") {

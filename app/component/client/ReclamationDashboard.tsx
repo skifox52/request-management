@@ -1,5 +1,5 @@
 "use client"
-import { changeInterventionStatus } from "@/app/actions/demandeActions"
+import { changeInterventionStatus } from "@/app/_actions/demandeActions"
 import { TClaims } from "@/app/dashboard/allReclamations/page"
 import { useDebounce } from "@/app/utils/useDebounce"
 import {

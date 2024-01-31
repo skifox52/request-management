@@ -35,7 +35,7 @@ import {
   disableUser,
   enableUser,
   updatePasswordById,
-} from "@/app/actions/userActions"
+} from "@/app/_actions/userActions"
 import InputUI from "@/app/component/ui/InputUI"
 import { useForm } from "react-hook-form"
 import Spinner from "@/app/component/ui/Spinner"

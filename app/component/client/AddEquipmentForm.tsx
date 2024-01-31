@@ -11,7 +11,7 @@ import {
   TaddEquipmentSchema,
   addEquipmentSchema,
 } from "@/app/zod/addEquipmentSchema"
-import { addEquipmentAction } from "@/app/actions/equipmentActions"
+import { addEquipmentAction } from "@/app/_actions/equipmentActions"
 import { useEdgeStore } from "@/app/utils/edgestore"
 
 interface AddEquipmentFormProps {}
